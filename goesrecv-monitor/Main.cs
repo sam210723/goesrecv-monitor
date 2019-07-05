@@ -18,6 +18,27 @@ namespace goesrecv_monitor
             InitializeComponent();
 
             SetVersionLabel();
+            ConfigConstellation();
+        }
+
+        /// <summary>
+        /// Configures constellation display
+        /// </summary>
+        void ConfigConstellation()
+        {
+            // Set background colour
+            pboxConstellation.BackColor = Color.FromArgb(255, 15, 15, 15);
+
+            // Create base bitmap
+            Bitmap bmp = new Bitmap(400, 400);
+            Graphics g = Graphics.FromImage(bmp);
+
+            // Draw divider line
+            Pen p = new Pen(Brushes.DarkSlateGray, 1);
+            g.DrawLine(p, 0, 200, 400, 200);
+
+            // Show bitmap in picture box
+            pboxConstellation.Image = bmp;
         }
 
         /// <summary>
