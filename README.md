@@ -1,2 +1,2 @@
-# goesrecv-monitor
-Status monitor for goesrecv xRIT demodulator and decoder
+# goesrecv monitor
+Status monitor for goesrecv xRIT demodulator and decoder.
