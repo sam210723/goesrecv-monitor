@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,19 @@ namespace goesrecv_monitor
         public Main()
         {
             InitializeComponent();
+
+            SetVersionLabel();
+        }
+
+        /// <summary>
+        /// Sets the version label to assembly version
+        /// </summary>
+        void SetVersionLabel()
+        {
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            labelVersion.Text = "v" + fvi.FileVersion;
         }
     }
 }

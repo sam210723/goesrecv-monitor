@@ -8,6 +8,11 @@ namespace goesrecv_monitor
 {
     static class Program
     {
+        private static void Initialise()
+        {
+            Console.WriteLine("Initialising...");
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -16,6 +21,9 @@ namespace goesrecv_monitor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            Initialise();
+
             Application.Run(new Main());
         }
     }
