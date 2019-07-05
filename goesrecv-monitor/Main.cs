@@ -18,14 +18,19 @@ namespace goesrecv_monitor
         {
             InitializeComponent();
 
+            // UI initialisation methods
             SetVersionLabel();
-            ConfigConstellation();
+            InitConstellation();
+
+            // Set control colours
+            btnConnct.BackColor = Color.FromArgb(255, 30, 30, 30);
+            textIP.BackColor = Color.FromArgb(255, 30, 30, 30);
         }
 
         /// <summary>
         /// Configures constellation display
         /// </summary>
-        void ConfigConstellation()
+        void InitConstellation()
         {
             // Set background colour
             pboxConstellation.BackColor = Color.FromArgb(255, 15, 15, 15);
@@ -62,6 +67,7 @@ namespace goesrecv_monitor
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
 
             labelVersion.Text = "v" + fvi.FileVersion;
+            labelVersion.BackColor = Color.FromArgb(255, 15, 15, 15);
         }
     }
 }
