@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "goesrecv-monitor", "goesrecv-monitor\goesrecv-monitor.csproj", "{F42D4B4A-961E-49F2-8A1B-83A19AC63156}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F42D4B4A-961E-49F2-8A1B-83A19AC63156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F42D4B4A-961E-49F2-8A1B-83A19AC63156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F42D4B4A-961E-49F2-8A1B-83A19AC63156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F42D4B4A-961E-49F2-8A1B-83A19AC63156}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F7C04278-7B6C-4844-BCB6-D61504017214}
+	EndGlobalSection
+EndGlobal
