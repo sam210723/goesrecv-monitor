@@ -36,7 +36,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.labelDemodStatus = new System.Windows.Forms.Label();
+            this.labelSignalLock = new System.Windows.Forms.Label();
             this.progressSignalQ = new System.Windows.Forms.ProgressBar();
             this.labelFreqOffset = new System.Windows.Forms.Label();
             this.labelVitErr = new System.Windows.Forms.Label();
@@ -74,7 +74,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.labelRsErr, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.labelVitErr, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.labelDemodStatus, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelSignalLock, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label5, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.progressSignalQ, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 4);
@@ -101,9 +101,9 @@
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
             this.label1.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label1.Size = new System.Drawing.Size(133, 21);
+            this.label1.Size = new System.Drawing.Size(83, 21);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Demodulator Status";
+            this.label1.Text = "Signal Lock";
             // 
             // label2
             // 
@@ -153,18 +153,18 @@
             this.label5.TabIndex = 7;
             this.label5.Text = "Signal Quality";
             // 
-            // labelDemodStatus
+            // labelSignalLock
             // 
-            this.labelDemodStatus.AutoSize = true;
-            this.labelDemodStatus.BackColor = System.Drawing.Color.Red;
-            this.labelDemodStatus.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDemodStatus.ForeColor = System.Drawing.Color.White;
-            this.labelDemodStatus.Location = new System.Drawing.Point(156, 0);
-            this.labelDemodStatus.Name = "labelDemodStatus";
-            this.labelDemodStatus.Padding = new System.Windows.Forms.Padding(34, 5, 34, 5);
-            this.labelDemodStatus.Size = new System.Drawing.Size(147, 26);
-            this.labelDemodStatus.TabIndex = 4;
-            this.labelDemodStatus.Text = "UNLOCKED";
+            this.labelSignalLock.AutoSize = true;
+            this.labelSignalLock.BackColor = System.Drawing.Color.Black;
+            this.labelSignalLock.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSignalLock.ForeColor = System.Drawing.Color.White;
+            this.labelSignalLock.Location = new System.Drawing.Point(156, 0);
+            this.labelSignalLock.Name = "labelSignalLock";
+            this.labelSignalLock.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.labelSignalLock.Size = new System.Drawing.Size(12, 21);
+            this.labelSignalLock.TabIndex = 4;
+            this.labelSignalLock.Text = "-";
             // 
             // progressSignalQ
             // 
@@ -269,7 +269,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label labelDemodStatus;
+        private System.Windows.Forms.Label labelSignalLock;
         private System.Windows.Forms.ProgressBar progressSignalQ;
         private System.Windows.Forms.Label labelFreqOffset;
         private System.Windows.Forms.Label labelRsErr;

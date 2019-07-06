@@ -39,10 +39,12 @@ namespace goesrecv_monitor
         /// </summary>
         public static void Stop()
         {
-            DemodThread.Abort();
-            DecoderThread.Abort();
+            if (DemodThread != null && DecoderThread != null)
+            {
+                DemodThread.Abort();
+                DecoderThread.Abort();
+            }
         }
-
 
 
         /// <summary>
@@ -82,9 +84,9 @@ namespace goesrecv_monitor
             }
 
             // Continually receive data
-            byte[] dres = new byte[5120];
             while (true)
             {
+                byte[] dres = new byte[5120];
                 s.Receive(dres);
 
                 // Convert to string and trim
@@ -106,7 +108,7 @@ namespace goesrecv_monitor
                 }
                 else
                 {
-                    freqUIStr = freq + " kHz";
+                    freqUIStr = freq + " Hz";
                 }
 
                 // Update UI
@@ -123,12 +125,101 @@ namespace goesrecv_monitor
         {
             Console.WriteLine("[DECODER] Started");
 
+            Socket s = new Socket(SocketType.Stream, ProtocolType.Tcp);
+
+            try
+            {
+                // Connect socket
+                s.Connect(IP.ToString(), DecoderPort);
+                Console.WriteLine("[DECODER] Connected to {0}:{1}", IP, DecoderPort.ToString());
+
+                // Send nanomsg init message
+                s.Send(nninit);
+
+                // Check nanomsg response
+                byte[] res = new byte[8];
+                int bytesRec = s.Receive(res);
+                if (res.SequenceEqual(nnires))
+                {
+                    Console.WriteLine("[DEMOD] Nanomsg OK");
+                }
+                else
+                {
+                    string resHex = BitConverter.ToString(res);
+                    Console.WriteLine("[DEMOD] Nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
+            // Continually receive data
             while (true)
             {
-                Thread.Sleep(10);
+                byte[] dres = new byte[1024];
+                s.Receive(dres);
+
+                // Convert to string and trim
+                string data = Encoding.ASCII.GetString(dres).TrimEnd('\0').TrimEnd('\n');
+
+                // Get Virerbi error count
+                string vitStr = data.Substring(data.IndexOf("viterbi_errors") + 17);
+                vitStr = vitStr.Substring(0, vitStr.IndexOf(','));
+                int vitErr = int.Parse(vitStr);
+
+                // Get lock state
+                bool locked;
+                string lockStr = data.Substring(data.IndexOf("ok") + 5, 1);
+                if (lockStr == "1")
+                {
+                    locked = true;
+                }
+                else
+                {
+                    locked = false;
+                }
+
+                // Split data into lines
+                int rsErr = 0;
+                string[] lines = data.Split('\n');
+                foreach (string l in lines)
+                {
+                    // Parse Line
+                    string rsStr = l.Substring(l.IndexOf("reed_solomon_errors") + 22);
+                    rsStr = rsStr.Substring(0, rsStr.IndexOf(','));
+
+                    if (rsStr != "-1")
+                    {
+                        rsErr += int.Parse(rsStr);
+                    }
+                }
+
+                // Cap viterbi in range for signal quality
+                float vitErrQ = vitErr;
+                float vitLower = 30f;
+                float vitUpper = 1000f;
+                if (vitErr < vitLower)
+                {
+                    vitErrQ = vitLower;
+                }
+                else if (vitErr > vitUpper)
+                {
+                    vitErrQ = vitUpper;
+                }
+
+                // Calculate signal quality
+                float sigQ = 100 - (((vitErrQ - vitLower) / (vitUpper - vitLower)) * 100);
+
+                // Update UI
+                Program.MainWindow.SignalLock = locked;
+                Program.MainWindow.SignalQuality = (int)sigQ;
+                Program.MainWindow.ViterbiErrors = vitErr;
+                Program.MainWindow.RSErrors = rsErr;
+
+                Thread.Sleep(500);
             }
         }
-
 
 
         // Properties

@@ -78,8 +78,16 @@ namespace goesrecv_monitor
             if (Stats.Running)
             {
                 Stats.Stop();
+
                 btnConnct.Text = "Connect";
                 btnConnct.ForeColor = Color.White;
+                labelSignalLock.Text = "-";
+                labelSignalLock.BackColor = Color.Black;
+                labelSignalLock.Padding = new Padding(0, 5, 0, 0);
+                labelFreqOffset.Text = "-";
+                progressSignalQ.Value = 0;
+                labelVitErr.Text = "-";
+                labelRsErr.Text = "-";
             }
             else
             {
@@ -101,6 +109,49 @@ namespace goesrecv_monitor
 
 
         // Properties
+        public bool SignalLock
+        {
+            set
+            {
+                if (value)
+                {
+                    if (labelSignalLock.InvokeRequired)
+                    {
+                        labelSignalLock.Invoke((MethodInvoker)(() =>
+                        {
+                            labelSignalLock.Text = "LOCKED";
+                            labelSignalLock.BackColor = Color.Green;
+                            labelSignalLock.Padding = new Padding(43, 5, 43, 5);
+                        }));
+                    }
+                    else
+                    {
+                        labelSignalLock.Text = "LOCKED";
+                        labelSignalLock.BackColor = Color.LimeGreen;
+                        labelSignalLock.Padding = new Padding(43, 5, 43, 5);
+                    }
+                }
+                else
+                {
+                    if (labelSignalLock.InvokeRequired)
+                    {
+                        labelSignalLock.Invoke((MethodInvoker)(() =>
+                        {
+                            labelSignalLock.Text = "UNLOCKED";
+                            labelSignalLock.BackColor = Color.Red;
+                            labelSignalLock.Padding = new Padding(34, 5, 34, 5);
+                        }));
+                    }
+                    else
+                    {
+                        labelSignalLock.Text = "UNLOCKED";
+                        labelSignalLock.BackColor = Color.Red;
+                        labelSignalLock.Padding = new Padding(0, 5, 0, 5);
+                    }
+                }
+            }
+        }
+
         public string FrequencyOffset
         {
             get
@@ -122,6 +173,78 @@ namespace goesrecv_monitor
                     labelFreqOffset.Text = value;
                 }
                 
+            }
+        }
+
+        public int SignalQuality
+        {
+            get
+            {
+                return progressSignalQ.Value;
+            }
+
+            set
+            {
+                if (progressSignalQ.InvokeRequired)
+                {
+                    progressSignalQ.Invoke((MethodInvoker)(() =>
+                    {
+                        progressSignalQ.Value = value;
+                    }));
+                }
+                else
+                {
+                    progressSignalQ.Value = value;
+                }
+
+            }
+        }
+
+        public int ViterbiErrors
+        {
+            get
+            {
+                return int.Parse(labelVitErr.Text);
+            }
+
+            set
+            {
+                if (labelVitErr.InvokeRequired)
+                {
+                    labelVitErr.Invoke((MethodInvoker)(() =>
+                    {
+                        labelVitErr.Text = value.ToString();
+                    }));
+                }
+                else
+                {
+                    labelVitErr.Text = value.ToString();
+                }
+
+            }
+        }
+
+        public int RSErrors
+        {
+            get
+            {
+                return int.Parse(labelVitErr.Text);
+            }
+
+            set
+            {
+                if (labelRsErr.InvokeRequired)
+                {
+                    labelRsErr.Invoke((MethodInvoker)(() =>
+                    {
+                        labelRsErr.Text = value.ToString();
+                    }));
+                }
+                else
+                {
+                    labelRsErr.Text = value.ToString();
+                }
+
             }
         }
     }
