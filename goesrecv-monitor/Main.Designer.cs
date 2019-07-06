@@ -230,6 +230,7 @@
             this.btnConnct.TabIndex = 3;
             this.btnConnct.Text = "Connect";
             this.btnConnct.UseVisualStyleBackColor = true;
+            this.btnConnct.Click += new System.EventHandler(this.btnConnct_Click);
             // 
             // Main
             // 

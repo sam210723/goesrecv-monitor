@@ -69,5 +69,24 @@ namespace goesrecv_monitor
             labelVersion.Text = "v" + fvi.FileVersion;
             labelVersion.BackColor = Color.FromArgb(255, 15, 15, 15);
         }
+
+        /// <summary>
+        /// Connect button click
+        /// </summary>
+        private void btnConnct_Click(object sender, EventArgs e)
+        {
+            if (Stats.Running)
+            {
+                Stats.Stop();
+                btnConnct.Text = "Connect";
+                btnConnct.ForeColor = Color.White;
+            }
+            else
+            {
+                Stats.Start();
+                btnConnct.Text = "STOP";
+                btnConnct.ForeColor = Color.Red;
+            }
+        }
     }
 }

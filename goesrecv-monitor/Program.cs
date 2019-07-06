@@ -8,9 +8,13 @@ namespace goesrecv_monitor
 {
     static class Program
     {
-        private static void Initialise()
+        public static Main MainWindow;
+        
+        static bool Init()
         {
             Console.WriteLine("Initialising...");
+
+            return true;
         }
 
         /// <summary>
@@ -22,9 +26,10 @@ namespace goesrecv_monitor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Initialise();
+            Init();
 
-            Application.Run(new Main());
+            MainWindow = new Main();
+            Application.Run(MainWindow);
         }
     }
 }
