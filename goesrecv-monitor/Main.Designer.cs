@@ -53,7 +53,7 @@
             this.labelVersion.BackColor = System.Drawing.Color.Black;
             this.labelVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelVersion.ForeColor = System.Drawing.Color.DimGray;
-            this.labelVersion.Location = new System.Drawing.Point(3, 381);
+            this.labelVersion.Location = new System.Drawing.Point(2, 165);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(28, 15);
             this.labelVersion.TabIndex = 15;
@@ -63,7 +63,7 @@
             // 
             this.pboxConstellation.Location = new System.Drawing.Point(0, 0);
             this.pboxConstellation.Name = "pboxConstellation";
-            this.pboxConstellation.Size = new System.Drawing.Size(250, 400);
+            this.pboxConstellation.Size = new System.Drawing.Size(350, 183);
             this.pboxConstellation.TabIndex = 1;
             this.pboxConstellation.TabStop = false;
             // 
@@ -82,7 +82,7 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.labelFreqOffset, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(265, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(361, 11);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -213,10 +213,10 @@
             // 
             this.textIP.BackColor = System.Drawing.Color.White;
             this.textIP.ForeColor = System.Drawing.Color.White;
-            this.textIP.Location = new System.Drawing.Point(267, 331);
+            this.textIP.Location = new System.Drawing.Point(579, 111);
             this.textIP.MaxLength = 15;
             this.textIP.Name = "textIP";
-            this.textIP.Size = new System.Drawing.Size(96, 20);
+            this.textIP.Size = new System.Drawing.Size(86, 20);
             this.textIP.TabIndex = 2;
             this.textIP.Text = "192.168.1.";
             // 
@@ -224,9 +224,9 @@
             // 
             this.btnConnct.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConnct.ForeColor = System.Drawing.Color.White;
-            this.btnConnct.Location = new System.Drawing.Point(265, 357);
+            this.btnConnct.Location = new System.Drawing.Point(578, 139);
             this.btnConnct.Name = "btnConnct";
-            this.btnConnct.Size = new System.Drawing.Size(100, 27);
+            this.btnConnct.Size = new System.Drawing.Size(88, 27);
             this.btnConnct.TabIndex = 3;
             this.btnConnct.Text = "Connect";
             this.btnConnct.UseVisualStyleBackColor = true;
@@ -237,7 +237,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(584, 400);
+            this.ClientSize = new System.Drawing.Size(681, 183);
             this.Controls.Add(this.textIP);
             this.Controls.Add(this.btnConnct);
             this.Controls.Add(this.labelVersion);

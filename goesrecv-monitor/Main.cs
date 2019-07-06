@@ -42,15 +42,15 @@ namespace goesrecv_monitor
 
             // Draw divider line
             Pen p = new Pen(Brushes.DarkSlateGray, 1);
-            Point p1 = new Point(0, pboxConstellation.Height / 2);
-            Point p2 = new Point(pboxConstellation.Width, pboxConstellation.Height / 2);
+            Point p1 = new Point(pboxConstellation.Width / 2, 0);
+            Point p2 = new Point(pboxConstellation.Width / 2, pboxConstellation.Height);
             g.DrawLine(p, p1, p2);
 
             // Draw test points
             Brush symBrush = Brushes.Yellow;
             int symWidth = 4;
-            Point sym0 = new Point((pboxConstellation.Width / 2) - (symWidth / 2), (pboxConstellation.Height / 4) - (symWidth / 2));
-            Point sym1 = new Point((pboxConstellation.Width / 2) - (symWidth / 2), ((pboxConstellation.Height / 4) * 3) - (symWidth / 2));
+            Point sym0 = new Point((pboxConstellation.Width / 4) - (symWidth / 2), (pboxConstellation.Height / 2) - (symWidth / 2));
+            Point sym1 = new Point(((pboxConstellation.Width / 4) * 3) - (symWidth / 2), (pboxConstellation.Height / 2) - (symWidth / 2));
             g.FillEllipse(symBrush, sym0.X, sym0.Y, symWidth, symWidth);
             g.FillEllipse(symBrush, sym1.X, sym1.Y, symWidth, symWidth);
 
