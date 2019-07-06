@@ -18,6 +18,15 @@ namespace goesrecv_monitor
         }
 
         /// <summary>
+        ///  Gracefully exits the application
+        /// </summary>
+        public static void GracefulExit()
+        {
+            Console.WriteLine("Exiting...");
+            Stats.Stop();
+        }
+
+        /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]

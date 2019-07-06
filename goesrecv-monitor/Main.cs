@@ -83,10 +83,20 @@ namespace goesrecv_monitor
             }
             else
             {
+                Stats.IP = textIP.Text;
                 Stats.Start();
+
                 btnConnct.Text = "STOP";
                 btnConnct.ForeColor = Color.Red;
             }
+        }
+
+        /// <summary>
+        /// Triggers graceful exit
+        /// </summary>
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Program.GracefulExit();
         }
     }
 }
