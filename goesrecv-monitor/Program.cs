@@ -9,13 +9,6 @@ namespace goesrecv_monitor
     static class Program
     {
         public static Main MainWindow;
-        
-        static bool Init()
-        {
-            Console.WriteLine("Initialising...");
-
-            return true;
-        }
 
         /// <summary>
         ///  Gracefully exits the application
@@ -24,6 +17,7 @@ namespace goesrecv_monitor
         {
             Console.WriteLine("Exiting...");
             Stats.Stop();
+            Symbols.Stop();
         }
 
         /// <summary>
@@ -34,8 +28,6 @@ namespace goesrecv_monitor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            Init();
 
             MainWindow = new Main();
             Application.Run(MainWindow);

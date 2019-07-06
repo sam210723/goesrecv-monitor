@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -50,7 +51,25 @@ namespace goesrecv_monitor
 
             try
             {
+                // Connect socket
                 s.Connect(IP, SymbolPort);
+                Console.WriteLine("[SYMBOL] Connected to {0}:{1}", IP, SymbolPort.ToString());
+
+                // Send nanomsg init message
+                s.Send(nninit);
+
+                // Check nanomsg response
+                byte[] res = new byte[8];
+                int bytesRec = s.Receive(res);
+                if (res.SequenceEqual(nnires))
+                {
+                    Console.WriteLine("[SYMBOL] Nanomsg OK");
+                }
+                else
+                {
+                    string resHex = BitConverter.ToString(res);
+                    Console.WriteLine("[SYMBOL] Nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires));
+                }
             }
             catch (Exception e)
             {
@@ -59,14 +78,35 @@ namespace goesrecv_monitor
 
             while (true)
             {
-                Thread.Sleep(100);
+                byte[] dres = new byte[1048576]; // 1M
+                s.Receive(dres);
+
+                List<Point> points = new List<Point>();
+
+                // Loop through bytes 2 at a time, skipping first 8
+                for (int i = 8; i < 1024; i = i + 2)
+                {
+                    sbyte symI = (sbyte) dres[i];
+                    sbyte symQ = (sbyte) dres[i + 1];
+
+                    // Ignore null values
+                    if (symI != '\0' && symQ != '\0')
+                    {
+                        points.Add(new Point(symI, symQ));
+                    }
+                }
+
+                // Update UI
+                Program.MainWindow.DrawSymbols(points);
+
+                Thread.Sleep(10);
             }
         }
 
 
         // Properties
         public static string IP { get; set; }
-        static readonly int SymbolPort = 5001;
+        static readonly int SymbolPort = 5002;
 
         /// <summary>
         /// Indicates if symbol processing thread is running

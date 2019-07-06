@@ -14,6 +14,9 @@ namespace goesrecv_monitor
 {
     public partial class Main : Form
     {
+        Bitmap constellationBase;
+        Point constellationCenter;
+
         public Main()
         {
             InitializeComponent();
@@ -35,9 +38,12 @@ namespace goesrecv_monitor
             // Set background colour
             pboxConstellation.BackColor = Color.FromArgb(255, 15, 15, 15);
 
+            // Get constellation center point
+            constellationCenter = new Point(pboxConstellation.Width / 2, pboxConstellation.Height / 2);
+
             // Create base bitmap
-            Bitmap bmp = new Bitmap(400, 400);
-            Graphics g = Graphics.FromImage(bmp);
+            constellationBase = new Bitmap(pboxConstellation.Width, pboxConstellation.Height);
+            Graphics g = Graphics.FromImage(constellationBase);
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             // Draw divider line
@@ -47,15 +53,48 @@ namespace goesrecv_monitor
             g.DrawLine(p, p1, p2);
 
             // Draw test points
+            /*
             Brush symBrush = Brushes.Yellow;
             int symWidth = 4;
             Point sym0 = new Point((pboxConstellation.Width / 4) - (symWidth / 2), (pboxConstellation.Height / 2) - (symWidth / 2));
             Point sym1 = new Point(((pboxConstellation.Width / 4) * 3) - (symWidth / 2), (pboxConstellation.Height / 2) - (symWidth / 2));
             g.FillEllipse(symBrush, sym0.X, sym0.Y, symWidth, symWidth);
             g.FillEllipse(symBrush, sym1.X, sym1.Y, symWidth, symWidth);
+            */
 
             // Show bitmap in picture box
-            pboxConstellation.Image = bmp;
+            pboxConstellation.Image = constellationBase;
+        }
+
+        /// <summary>
+        /// Draws symbols on constellation display
+        /// </summary>
+        /// <param name="points">List of point objects representing symbols</param>
+        public void DrawSymbols(List<Point> points)
+        {
+            Bitmap bmp = new Bitmap(constellationBase);
+            Graphics g = Graphics.FromImage(bmp);
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+            foreach (Point p in points)
+            {
+                // Draw point
+                float pX = (float)constellationCenter.X + (float)(p.X * 1.5);
+                float pY = (float)constellationCenter.Y + (float)(p.Y * 1.5);
+                g.FillEllipse(Brushes.Yellow, pX, pY, 3, 3);
+
+                // Show bitmap in picture box
+                if (pboxConstellation.InvokeRequired)
+                {
+                    pboxConstellation.Invoke((MethodInvoker)(() => {
+                        pboxConstellation.Image = bmp;
+                    }));
+                }
+                else
+                {
+                    pboxConstellation.Image = bmp;
+                }
+            }
         }
 
         /// <summary>
