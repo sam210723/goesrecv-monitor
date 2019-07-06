@@ -137,9 +137,9 @@
             this.label4.Location = new System.Drawing.Point(3, 128);
             this.label4.Name = "label4";
             this.label4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.label4.Size = new System.Drawing.Size(102, 21);
+            this.label4.Size = new System.Drawing.Size(67, 21);
             this.label4.TabIndex = 11;
-            this.label4.Text = "Reed Solomon";
+            this.label4.Text = "RS Errors";
             // 
             // label5
             // 

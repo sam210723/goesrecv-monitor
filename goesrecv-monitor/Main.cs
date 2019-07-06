@@ -79,6 +79,7 @@ namespace goesrecv_monitor
             {
                 Stats.Stop();
 
+                textIP.Enabled = true;
                 btnConnct.Text = "Connect";
                 btnConnct.ForeColor = Color.White;
                 labelSignalLock.Text = "-";
@@ -94,6 +95,7 @@ namespace goesrecv_monitor
                 Stats.IP = textIP.Text;
                 Stats.Start();
 
+                textIP.Enabled = false;
                 btnConnct.Text = "STOP";
                 btnConnct.ForeColor = Color.Red;
             }

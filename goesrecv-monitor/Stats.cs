@@ -141,12 +141,12 @@ namespace goesrecv_monitor
                 int bytesRec = s.Receive(res);
                 if (res.SequenceEqual(nnires))
                 {
-                    Console.WriteLine("[DEMOD] Nanomsg OK");
+                    Console.WriteLine("[DECODER] Nanomsg OK");
                 }
                 else
                 {
                     string resHex = BitConverter.ToString(res);
-                    Console.WriteLine("[DEMOD] Nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires));
+                    Console.WriteLine("[DECODER] Nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires));
                 }
             }
             catch (Exception e)
