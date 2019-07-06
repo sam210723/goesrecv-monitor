@@ -78,6 +78,7 @@ namespace goesrecv_monitor
             if (Stats.Running)
             {
                 Stats.Stop();
+                Symbols.Stop();
 
                 textIP.Enabled = true;
                 btnConnct.Text = "Connect";
@@ -94,6 +95,8 @@ namespace goesrecv_monitor
             {
                 Stats.IP = textIP.Text;
                 Stats.Start();
+                Symbols.IP = textIP.Text;
+                Symbols.Start();
 
                 textIP.Enabled = false;
                 btnConnct.Text = "STOP";

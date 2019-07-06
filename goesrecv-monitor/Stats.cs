@@ -59,7 +59,7 @@ namespace goesrecv_monitor
             try
             {
                 // Connect socket
-                s.Connect(IP.ToString(), DemodPort);
+                s.Connect(IP, DemodPort);
                 Console.WriteLine("[DEMOD] Connected to {0}:{1}", IP, DemodPort.ToString());
 
                 // Send nanomsg init message
@@ -80,7 +80,7 @@ namespace goesrecv_monitor
             }
             catch (Exception e)
             {  
-                Console.WriteLine(e.ToString());  
+                Console.WriteLine(e.ToString());
             }
 
             // Continually receive data
