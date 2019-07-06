@@ -98,5 +98,31 @@ namespace goesrecv_monitor
         {
             Program.GracefulExit();
         }
+
+
+        // Properties
+        public string FrequencyOffset
+        {
+            get
+            {
+                return labelFreqOffset.Text;
+            }
+
+            set
+            {
+                if (labelFreqOffset.InvokeRequired)
+                {
+                    labelFreqOffset.Invoke((MethodInvoker)(() =>
+                    {
+                        labelFreqOffset.Text = value;
+                    }));
+                }
+                else
+                {
+                    labelFreqOffset.Text = value;
+                }
+                
+            }
+        }
     }
 }

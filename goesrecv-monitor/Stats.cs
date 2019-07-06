@@ -82,7 +82,7 @@ namespace goesrecv_monitor
             }
 
             // Continually receive data
-            byte[] dres = new byte[1024];
+            byte[] dres = new byte[5120];
             while (true)
             {
                 s.Receive(dres);
@@ -92,7 +92,27 @@ namespace goesrecv_monitor
                 data = data.Substring(8, data.IndexOf('\n'));
                 data = data.TrimEnd('\0').TrimEnd('\n');
 
-                Thread.Sleep(100);
+                // Parse frequency value
+                string freqStr = data.Substring(data.IndexOf("frequency") + 12);
+                freqStr = freqStr.Substring(0, freqStr.IndexOf(","));
+                decimal freq = Math.Round(Decimal.Parse(freqStr, System.Globalization.NumberStyles.Float));
+
+                // kHz vs Hz
+                string freqUIStr;
+                if (freq > 999 || freq < -999)
+                {
+                    freq = freq / 1000;
+                    freqUIStr = freq.ToString() + " kHz";
+                }
+                else
+                {
+                    freqUIStr = freq + " kHz";
+                }
+
+                // Update UI
+                Program.MainWindow.FrequencyOffset = freqUIStr;
+
+                Thread.Sleep(500);
             }
         }
 
