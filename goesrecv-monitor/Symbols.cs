@@ -35,6 +35,7 @@ namespace goesrecv_monitor
         {
             if (SymbolThread != null)
             {
+                Console.WriteLine("[SYMBOL] Stopping");
                 SymbolThread.Abort();
             }
         }
@@ -73,18 +74,28 @@ namespace goesrecv_monitor
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("[SYMBOL] Failed to connect");
+                Stop();
+                return;
             }
 
             while (true)
             {
-                byte[] dres = new byte[1048576]; // 1M
-                s.Receive(dres);
+                byte[] dres = new byte[65536];
+                int numbytes = s.Receive(dres);
 
-                List<Point> points = new List<Point>();
+                // Kill thread if no data received
+                if (numbytes == 0)
+                {
+                    Console.WriteLine("[SYMBOL] No data");
+                    Stop();
+                    return;
+                }
+
+                    List<Point> points = new List<Point>();
 
                 // Loop through bytes 2 at a time, skipping first 8
-                for (int i = 8; i < 1024; i = i + 2)
+                for (int i = 8; i < 2048; i = i + 2)
                 {
                     sbyte symI = (sbyte) dres[i];
                     sbyte symQ = (sbyte) dres[i + 1];

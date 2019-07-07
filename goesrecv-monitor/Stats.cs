@@ -41,6 +41,7 @@ namespace goesrecv_monitor
         {
             if (DemodThread != null && DecoderThread != null)
             {
+                Console.WriteLine("[DEMOD] Stopping\n[DECODER] Stopping");
                 DemodThread.Abort();
                 DecoderThread.Abort();
             }
@@ -67,7 +68,7 @@ namespace goesrecv_monitor
 
                 // Check nanomsg response
                 byte[] res = new byte[8];
-                int bytesRec = s.Receive(res);
+                s.Receive(res);
                 if (res.SequenceEqual(nnires))
                 {
                     Console.WriteLine("[DEMOD] Nanomsg OK");
@@ -79,15 +80,37 @@ namespace goesrecv_monitor
                 }
             }
             catch (Exception e)
-            {  
-                Console.WriteLine(e.ToString());
+            {
+                Console.WriteLine("[DEMOD] Failed to connect");
+
+                // Reset UI and alert user
+                Program.MainWindow.ResetUI();
+                System.Windows.Forms.MessageBox.Show("Unable to connect to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                // Stop all threads
+                Stop();
+                return;
             }
 
             // Continually receive data
             while (true)
             {
                 byte[] dres = new byte[5120];
-                s.Receive(dres);
+                int numbytes = s.Receive(dres);
+
+                // Kill thread if no data received
+                if (numbytes == 0)
+                {
+                    Console.WriteLine("[DEMOD] No data");
+
+                    // Reset UI and alert user
+                    Program.MainWindow.ResetUI();
+                    System.Windows.Forms.MessageBox.Show("Lost connection to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                    // Stop all threads
+                    Stop();
+                    return;
+                }
 
                 // Convert to string and trim
                 string data = Encoding.ASCII.GetString(dres);
@@ -151,14 +174,22 @@ namespace goesrecv_monitor
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                Console.WriteLine("[DECODER] Failed to connect");
+                return;
             }
 
             // Continually receive data
             while (true)
             {
                 byte[] dres = new byte[1024];
-                s.Receive(dres);
+                int numbytes = s.Receive(dres);
+
+                // Kill thread if no data received
+                if (numbytes == 0)
+                {
+                    Console.WriteLine("[DECODER] No data");
+                    return;
+                }
 
                 // Convert to string and trim
                 string data = Encoding.ASCII.GetString(dres).TrimEnd('\0').TrimEnd('\n');

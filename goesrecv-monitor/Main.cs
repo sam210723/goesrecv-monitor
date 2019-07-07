@@ -1,112 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
 using System.Windows.Forms;
 
 namespace goesrecv_monitor
 {
     public partial class Main : Form
     {
-        Bitmap constellationBase;
-        Point constellationCenter;
-
         public Main()
         {
             InitializeComponent();
 
-            // UI initialisation methods
-            SetVersionLabel();
-            InitConstellation();
+            // Set version label
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+            labelVersion.Text = "v" + fvi.FileVersion;
 
             // Set control colours
             btnConnct.BackColor = Color.FromArgb(255, 30, 30, 30);
             textIP.BackColor = Color.FromArgb(255, 30, 30, 30);
+            constellationPanel.BackColor = Color.FromArgb(255, 20, 20, 20);
+            labelVersion.BackColor = Color.FromArgb(255, 20, 20, 20);
         }
 
         /// <summary>
-        /// Configures constellation display
+        /// Draws symbols on constellation plot
         /// </summary>
-        void InitConstellation()
-        {
-            // Set background colour
-            pboxConstellation.BackColor = Color.FromArgb(255, 15, 15, 15);
-
-            // Get constellation center point
-            constellationCenter = new Point(pboxConstellation.Width / 2, pboxConstellation.Height / 2);
-
-            // Create base bitmap
-            constellationBase = new Bitmap(pboxConstellation.Width, pboxConstellation.Height);
-            Graphics g = Graphics.FromImage(constellationBase);
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            // Draw divider line
-            Pen p = new Pen(Brushes.DarkSlateGray, 1);
-            Point p1 = new Point(pboxConstellation.Width / 2, 0);
-            Point p2 = new Point(pboxConstellation.Width / 2, pboxConstellation.Height);
-            g.DrawLine(p, p1, p2);
-
-            // Draw test points
-            /*
-            Brush symBrush = Brushes.Yellow;
-            int symWidth = 4;
-            Point sym0 = new Point((pboxConstellation.Width / 4) - (symWidth / 2), (pboxConstellation.Height / 2) - (symWidth / 2));
-            Point sym1 = new Point(((pboxConstellation.Width / 4) * 3) - (symWidth / 2), (pboxConstellation.Height / 2) - (symWidth / 2));
-            g.FillEllipse(symBrush, sym0.X, sym0.Y, symWidth, symWidth);
-            g.FillEllipse(symBrush, sym1.X, sym1.Y, symWidth, symWidth);
-            */
-
-            // Show bitmap in picture box
-            pboxConstellation.Image = constellationBase;
-        }
-
-        /// <summary>
-        /// Draws symbols on constellation display
-        /// </summary>
-        /// <param name="points">List of point objects representing symbols</param>
+        /// <param name="points">List of Point objects representing symbols</param>
         public void DrawSymbols(List<Point> points)
         {
-            Bitmap bmp = new Bitmap(constellationBase);
-            Graphics g = Graphics.FromImage(bmp);
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-
-            foreach (Point p in points)
+            if (constellationPanel.InvokeRequired)
             {
-                // Draw point
-                float pX = (float)constellationCenter.X + (float)(p.X * 1.5);
-                float pY = (float)constellationCenter.Y + (float)(p.Y * 1.5);
-                g.FillEllipse(Brushes.Yellow, pX, pY, 3, 3);
-
-                // Show bitmap in picture box
-                if (pboxConstellation.InvokeRequired)
-                {
-                    pboxConstellation.Invoke((MethodInvoker)(() => {
-                        pboxConstellation.Image = bmp;
-                    }));
-                }
-                else
-                {
-                    pboxConstellation.Image = bmp;
-                }
+                constellationPanel.Invoke((MethodInvoker)(() => {
+                    constellationPanel.DrawSymbols(points);
+                }));
             }
-        }
-
-        /// <summary>
-        /// Sets the version label to assembly version
-        /// </summary>
-        void SetVersionLabel()
-        {
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-
-            labelVersion.Text = "v" + fvi.FileVersion;
-            labelVersion.BackColor = Color.FromArgb(255, 15, 15, 15);
+            else
+            {
+                constellationPanel.DrawSymbols(points);
+            }
         }
 
         /// <summary>
@@ -116,9 +50,59 @@ namespace goesrecv_monitor
         {
             if (Stats.Running)
             {
+                // Stop threads
                 Stats.Stop();
                 Symbols.Stop();
 
+                ResetUI();
+            }
+            else
+            {
+                // Validate IP address
+                IPAddress ip;
+                if (!IPAddress.TryParse(textIP.Text, out ip))
+                {
+                    MessageBox.Show(this, "Invalid IP address", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+
+                // Set IPs
+                Stats.IP = textIP.Text;
+                Symbols.IP = textIP.Text;
+
+                // Start threads
+                Stats.Start();
+                Symbols.Start();
+
+                // Update UI
+                textIP.Enabled = false;
+                btnConnct.Text = "STOP";
+                btnConnct.ForeColor = Color.Red;
+            }
+        }
+
+        /// <summary>
+        /// Resets UI elements after disconnect
+        /// </summary>
+        public void ResetUI()
+        {
+            if (textIP.InvokeRequired)
+            {
+                textIP.Invoke((MethodInvoker)(() => {
+                    textIP.Enabled = true;
+                    btnConnct.Text = "Connect";
+                    btnConnct.ForeColor = Color.White;
+                    labelSignalLock.Text = "-";
+                    labelSignalLock.BackColor = Color.Black;
+                    labelSignalLock.Padding = new Padding(0, 5, 0, 0);
+                    labelFreqOffset.Text = "-";
+                    progressSignalQ.Value = 0;
+                    labelVitErr.Text = "-";
+                    labelRsErr.Text = "-";
+                }));
+            }
+            else
+            {
                 textIP.Enabled = true;
                 btnConnct.Text = "Connect";
                 btnConnct.ForeColor = Color.White;
@@ -129,17 +113,6 @@ namespace goesrecv_monitor
                 progressSignalQ.Value = 0;
                 labelVitErr.Text = "-";
                 labelRsErr.Text = "-";
-            }
-            else
-            {
-                Stats.IP = textIP.Text;
-                Stats.Start();
-                Symbols.IP = textIP.Text;
-                Symbols.Start();
-
-                textIP.Enabled = false;
-                btnConnct.Text = "STOP";
-                btnConnct.ForeColor = Color.Red;
             }
         }
 
