@@ -18,6 +18,18 @@ namespace goesrecv_monitor
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             labelVersion.Text = "v" + fvi.FileVersion;
 
+            // Validate saved IP
+            string IP = Properties.Settings.Default.IP;
+            IPAddress temp;
+            if (IPAddress.TryParse(IP, out temp))
+            {
+                textIP.Text = IP;
+            }
+            else
+            {
+                textIP.Text = "192.168.";
+            }
+
             // Set control colours
             btnConnct.BackColor = Color.FromArgb(255, 30, 30, 30);
             textIP.BackColor = Color.FromArgb(255, 30, 30, 30);
@@ -60,12 +72,16 @@ namespace goesrecv_monitor
             else
             {
                 // Validate IP address
-                IPAddress ip;
-                if (!IPAddress.TryParse(textIP.Text, out ip))
+                IPAddress temp;
+                if (!IPAddress.TryParse(textIP.Text, out temp))
                 {
                     MessageBox.Show(this, "Invalid IP address", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
+
+                // Save IP address
+                Properties.Settings.Default.IP = textIP.Text;
+                Properties.Settings.Default.Save();
 
                 // Set IPs
                 Stats.IP = textIP.Text;
