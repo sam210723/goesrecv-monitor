@@ -236,7 +236,7 @@ namespace goesrecv_monitor
 
                         if (rsStr != "-1")
                         {
-                            rsErr += int.Parse(rsStr);
+                            int.TryParse(rsStr, out rsErr);
                         }
                     }
                 }
