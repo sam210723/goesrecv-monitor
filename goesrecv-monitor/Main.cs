@@ -23,6 +23,7 @@ namespace goesrecv_monitor
             textIP.BackColor = Color.FromArgb(255, 30, 30, 30);
             constellationPanel.BackColor = Color.FromArgb(255, 20, 20, 20);
             labelVersion.BackColor = Color.FromArgb(255, 20, 20, 20);
+            labelSite.BackColor = Color.FromArgb(255, 20, 20, 20);
         }
 
         /// <summary>
@@ -82,6 +83,19 @@ namespace goesrecv_monitor
         }
 
         /// <summary>
+        /// Trigger connect on Enter key in IP text box
+        /// </summary>
+        private void textIP_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // If key is Enter
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;  // Stop Enter char reaching text box
+                btnConnct_Click(btnConnct, null);
+            }
+        }
+
+        /// <summary>
         /// Resets UI elements after disconnect
         /// </summary>
         public void ResetUI()
@@ -90,6 +104,7 @@ namespace goesrecv_monitor
             {
                 textIP.Invoke((MethodInvoker)(() => {
                     textIP.Enabled = true;
+                    textIP.Focus();
                     btnConnct.Text = "Connect";
                     btnConnct.ForeColor = Color.White;
                     labelSignalLock.Text = "-";
@@ -104,6 +119,7 @@ namespace goesrecv_monitor
             else
             {
                 textIP.Enabled = true;
+                textIP.Focus();
                 btnConnct.Text = "Connect";
                 btnConnct.ForeColor = Color.White;
                 labelSignalLock.Text = "-";

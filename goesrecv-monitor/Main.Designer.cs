@@ -43,6 +43,7 @@
             this.btnConnct = new System.Windows.Forms.Button();
             this.labelVersion = new System.Windows.Forms.Label();
             this.constellationPanel = new goesrecv_monitor.ConstellationPanel();
+            this.labelSite = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.constellationPanel.SuspendLayout();
             this.SuspendLayout();
@@ -62,7 +63,7 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.labelFreqOffset, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(361, 11);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(361, 15);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -193,18 +194,20 @@
             // 
             this.textIP.BackColor = System.Drawing.Color.White;
             this.textIP.ForeColor = System.Drawing.Color.White;
-            this.textIP.Location = new System.Drawing.Point(579, 111);
+            this.textIP.Location = new System.Drawing.Point(578, 115);
             this.textIP.MaxLength = 15;
+            this.textIP.Multiline = true;
             this.textIP.Name = "textIP";
             this.textIP.Size = new System.Drawing.Size(86, 20);
             this.textIP.TabIndex = 2;
             this.textIP.Text = "192.168.1.";
+            this.textIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textIP_KeyPress);
             // 
             // btnConnct
             // 
             this.btnConnct.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConnct.ForeColor = System.Drawing.Color.White;
-            this.btnConnct.Location = new System.Drawing.Point(578, 139);
+            this.btnConnct.Location = new System.Drawing.Point(577, 143);
             this.btnConnct.Name = "btnConnct";
             this.btnConnct.Size = new System.Drawing.Size(88, 27);
             this.btnConnct.TabIndex = 3;
@@ -216,28 +219,41 @@
             // 
             this.labelVersion.AutoSize = true;
             this.labelVersion.BackColor = System.Drawing.Color.Black;
-            this.labelVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVersion.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelVersion.ForeColor = System.Drawing.Color.DimGray;
-            this.labelVersion.Location = new System.Drawing.Point(2, 165);
+            this.labelVersion.Location = new System.Drawing.Point(2, 167);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(28, 15);
+            this.labelVersion.Size = new System.Drawing.Size(25, 13);
             this.labelVersion.TabIndex = 15;
             this.labelVersion.Text = "VER";
             // 
             // constellationPanel
             // 
+            this.constellationPanel.Controls.Add(this.labelSite);
             this.constellationPanel.Controls.Add(this.labelVersion);
             this.constellationPanel.Location = new System.Drawing.Point(0, 0);
             this.constellationPanel.Name = "constellationPanel";
             this.constellationPanel.Size = new System.Drawing.Size(350, 183);
             this.constellationPanel.TabIndex = 16;
             // 
+            // labelSite
+            // 
+            this.labelSite.AutoSize = true;
+            this.labelSite.BackColor = System.Drawing.Color.Black;
+            this.labelSite.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSite.ForeColor = System.Drawing.Color.DimGray;
+            this.labelSite.Location = new System.Drawing.Point(286, 167);
+            this.labelSite.Name = "labelSite";
+            this.labelSite.Size = new System.Drawing.Size(61, 13);
+            this.labelSite.TabIndex = 16;
+            this.labelSite.Text = "vksdr.com";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(681, 183);
+            this.ClientSize = new System.Drawing.Size(678, 183);
             this.Controls.Add(this.constellationPanel);
             this.Controls.Add(this.textIP);
             this.Controls.Add(this.btnConnct);
@@ -275,6 +291,7 @@
         private System.Windows.Forms.Button btnConnct;
         private System.Windows.Forms.Label labelVersion;
         private ConstellationPanel constellationPanel;
+        private System.Windows.Forms.Label labelSite;
     }
 }
 
