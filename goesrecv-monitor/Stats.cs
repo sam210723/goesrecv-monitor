@@ -112,15 +112,25 @@ namespace goesrecv_monitor
                     return;
                 }
 
-                // Convert to string and trim
-                string data = Encoding.ASCII.GetString(dres);
-                data = data.Substring(8, data.IndexOf('\n'));
-                data = data.TrimEnd('\0').TrimEnd('\n');
+                decimal freq;
+                try
+                {
+                    // Convert to string and trim
+                    string data = Encoding.ASCII.GetString(dres);
+                    data = data.Substring(8, data.IndexOf('\n'));
+                    data = data.TrimEnd('\0').TrimEnd('\n');
 
-                // Parse frequency value
-                string freqStr = data.Substring(data.IndexOf("frequency") + 12);
-                freqStr = freqStr.Substring(0, freqStr.IndexOf(","));
-                decimal freq = Math.Round(Decimal.Parse(freqStr, System.Globalization.NumberStyles.Float));
+                    // Parse frequency value
+                    string freqStr = data.Substring(data.IndexOf("frequency") + 12);
+                    freqStr = freqStr.Substring(0, freqStr.IndexOf(","));
+                    freq = Math.Round(Decimal.Parse(freqStr, System.Globalization.NumberStyles.Float));
+
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine("[DEMOD] Substring error");
+                    continue;
+                }
 
                 // kHz vs Hz
                 string freqUIStr;
@@ -194,36 +204,46 @@ namespace goesrecv_monitor
                 // Convert to string and trim
                 string data = Encoding.ASCII.GetString(dres).TrimEnd('\0').TrimEnd('\n');
 
-                // Get Virerbi error count
-                string vitStr = data.Substring(data.IndexOf("viterbi_errors") + 17);
-                vitStr = vitStr.Substring(0, vitStr.IndexOf(','));
-                int vitErr = int.Parse(vitStr);
-
-                // Get lock state
-                bool locked;
-                string lockStr = data.Substring(data.IndexOf("ok") + 5, 1);
-                if (lockStr == "1")
-                {
-                    locked = true;
-                }
-                else
-                {
-                    locked = false;
-                }
-
-                // Split data into lines
+                int vitErr;
                 int rsErr = 0;
-                string[] lines = data.Split('\n');
-                foreach (string l in lines)
+                bool locked;
+                try
                 {
-                    // Parse Line
-                    string rsStr = l.Substring(l.IndexOf("reed_solomon_errors") + 22);
-                    rsStr = rsStr.Substring(0, rsStr.IndexOf(','));
+                    // Get Virerbi error count
+                    string vitStr = data.Substring(data.IndexOf("viterbi_errors") + 17);
+                    vitStr = vitStr.Substring(0, vitStr.IndexOf(','));
+                    vitErr = int.Parse(vitStr);
 
-                    if (rsStr != "-1")
+                    // Get lock state
+                    string lockStr = data.Substring(data.IndexOf("ok") + 5, 1);
+                    if (lockStr == "1")
                     {
-                        rsErr += int.Parse(rsStr);
+                        locked = true;
                     }
+                    else
+                    {
+                        locked = false;
+                    }
+
+                    // Split data into lines
+                    rsErr = 0;
+                    string[] lines = data.Split('\n');
+                    foreach (string l in lines)
+                    {
+                        // Parse Line
+                        string rsStr = l.Substring(l.IndexOf("reed_solomon_errors") + 22);
+                        rsStr = rsStr.Substring(0, rsStr.IndexOf(','));
+
+                        if (rsStr != "-1")
+                        {
+                            rsErr += int.Parse(rsStr);
+                        }
+                    }
+                }
+                catch (ArgumentOutOfRangeException e)
+                {
+                    Console.WriteLine("[DEMOD] Substring error");
+                    continue;
                 }
 
                 // Cap viterbi in range for signal quality
