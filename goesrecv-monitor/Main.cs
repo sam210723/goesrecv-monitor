@@ -161,7 +161,7 @@ namespace goesrecv_monitor
         /// </summary>
         private void labelSite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://vksdr.com");
+            Process.Start("https://vksdr.com/goesrecv-monitor");
         }
 
         /// <summary>
