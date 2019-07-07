@@ -156,6 +156,22 @@ namespace goesrecv_monitor
             Program.GracefulExit();
         }
 
+        /// <summary>
+        /// Open site on link label click
+        /// </summary>
+        private void labelSite_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://vksdr.com");
+        }
+
+        /// <summary>
+        /// Open GitHub repo on link label click
+        /// </summary>
+        private void labelVersion_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/sam210723/goesrecv-monitor/releases/latest");
+        }
+
 
         // Properties
         public bool SignalLock

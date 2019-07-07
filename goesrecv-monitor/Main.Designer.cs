@@ -41,9 +41,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textIP = new System.Windows.Forms.TextBox();
             this.btnConnct = new System.Windows.Forms.Button();
-            this.labelVersion = new System.Windows.Forms.Label();
             this.constellationPanel = new goesrecv_monitor.ConstellationPanel();
-            this.labelSite = new System.Windows.Forms.Label();
+            this.labelSite = new System.Windows.Forms.LinkLabel();
+            this.labelVersion = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.constellationPanel.SuspendLayout();
             this.SuspendLayout();
@@ -215,22 +215,10 @@
             this.btnConnct.UseVisualStyleBackColor = true;
             this.btnConnct.Click += new System.EventHandler(this.btnConnct_Click);
             // 
-            // labelVersion
-            // 
-            this.labelVersion.AutoSize = true;
-            this.labelVersion.BackColor = System.Drawing.Color.Black;
-            this.labelVersion.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelVersion.ForeColor = System.Drawing.Color.DimGray;
-            this.labelVersion.Location = new System.Drawing.Point(2, 167);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(25, 13);
-            this.labelVersion.TabIndex = 15;
-            this.labelVersion.Text = "VER";
-            // 
             // constellationPanel
             // 
-            this.constellationPanel.Controls.Add(this.labelSite);
             this.constellationPanel.Controls.Add(this.labelVersion);
+            this.constellationPanel.Controls.Add(this.labelSite);
             this.constellationPanel.Location = new System.Drawing.Point(0, 0);
             this.constellationPanel.Name = "constellationPanel";
             this.constellationPanel.Size = new System.Drawing.Size(350, 183);
@@ -238,15 +226,31 @@
             // 
             // labelSite
             // 
+            this.labelSite.ActiveLinkColor = System.Drawing.Color.Silver;
             this.labelSite.AutoSize = true;
-            this.labelSite.BackColor = System.Drawing.Color.Black;
             this.labelSite.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSite.ForeColor = System.Drawing.Color.DimGray;
+            this.labelSite.LinkColor = System.Drawing.Color.DimGray;
             this.labelSite.Location = new System.Drawing.Point(286, 167);
             this.labelSite.Name = "labelSite";
             this.labelSite.Size = new System.Drawing.Size(61, 13);
-            this.labelSite.TabIndex = 16;
+            this.labelSite.TabIndex = 17;
+            this.labelSite.TabStop = true;
             this.labelSite.Text = "vksdr.com";
+            this.labelSite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelSite_LinkClicked);
+            // 
+            // labelVersion
+            // 
+            this.labelVersion.ActiveLinkColor = System.Drawing.Color.Silver;
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVersion.LinkColor = System.Drawing.Color.DimGray;
+            this.labelVersion.Location = new System.Drawing.Point(2, 167);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(25, 13);
+            this.labelVersion.TabIndex = 18;
+            this.labelVersion.TabStop = true;
+            this.labelVersion.Text = "VER";
+            this.labelVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelVersion_LinkClicked);
             // 
             // Main
             // 
@@ -289,9 +293,9 @@
         private System.Windows.Forms.Label labelVitErr;
         private System.Windows.Forms.TextBox textIP;
         private System.Windows.Forms.Button btnConnct;
-        private System.Windows.Forms.Label labelVersion;
         private ConstellationPanel constellationPanel;
-        private System.Windows.Forms.Label labelSite;
+        private System.Windows.Forms.LinkLabel labelSite;
+        private System.Windows.Forms.LinkLabel labelVersion;
     }
 }
 
