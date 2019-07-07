@@ -7,7 +7,7 @@
     <ProjectGuid>{F42D4B4A-961E-49F2-8A1B-83A19AC63156}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>goesrecv_monitor</RootNamespace>
-    <AssemblyName>goesrecv Monitor</AssemblyName>
+    <AssemblyName>goesrecv-monitor</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
