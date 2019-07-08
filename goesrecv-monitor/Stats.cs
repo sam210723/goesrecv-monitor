@@ -103,6 +103,13 @@ namespace goesrecv_monitor
                 if (numbytes == 0)
                 {
                     Console.WriteLine("[DEMOD] No data");
+
+                    // Reset UI and alert user
+                    Program.MainWindow.ResetUI();
+                    System.Windows.Forms.MessageBox.Show("Lost connection to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                    // Stop all threads
+                    Stop();
                     return;
                 }
 
