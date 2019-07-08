@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -102,51 +103,62 @@ namespace goesrecv_monitor
                 if (numbytes == 0)
                 {
                     Console.WriteLine("[DEMOD] No data");
-
-                    // Reset UI and alert user
-                    Program.MainWindow.ResetUI();
-                    System.Windows.Forms.MessageBox.Show("Lost connection to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                    // Stop all threads
-                    Stop();
                     return;
                 }
 
-                decimal freq;
+                // Tidy up raw data
+                string data;
+                string line;
                 try
                 {
-                    // Convert to string and trim
-                    string data = Encoding.ASCII.GetString(dres);
-                    data = data.Substring(8, data.IndexOf('\n'));
-                    data = data.TrimEnd('\0').TrimEnd('\n');
+                    data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
+                    data = data.TrimEnd('\0');                  // Trim trailing null bytes
+                    data = data.TrimEnd('\n');                  // Trim trailing newline
+                    line = data.Substring(data.IndexOf('{'), data.IndexOf('}') + 1);
 
-                    // Parse frequency value
-                    string freqStr = data.Substring(data.IndexOf("frequency") + 12);
-                    freqStr = freqStr.Substring(0, freqStr.IndexOf(","));
-                    freq = Math.Round(Decimal.Parse(freqStr, System.Globalization.NumberStyles.Float));
-
+                    // Handle double open brace
+                    if (line.StartsWith("{{\""))
+                    {
+                        line = line.Substring(1);
+                    }
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (Exception e)
                 {
-                    Console.WriteLine("[DEMOD] Substring error");
+                    Console.WriteLine("[DEMOD] Error trimming raw data");
+                    continue;
+                }
+
+                // Parse JSON objects
+                JObject json;
+                try
+                {
+                    json = JObject.Parse(line);
+                }
+                catch (Newtonsoft.Json.JsonReaderException e)
+                {
+                    Console.WriteLine("[DEMOD] Error parsing JSON: {0}", e.ToString());
+                    Console.WriteLine("[DEMOD] {0}", line);
                     continue;
                 }
 
                 // kHz vs Hz
-                string freqUIStr;
+                decimal freq = (decimal)json["frequency"];
+                string freqStr;
                 if (freq > 999 || freq < -999)
                 {
                     freq = freq / 1000;
-                    freqUIStr = freq.ToString() + " kHz";
+                    freq = Math.Round(freq, 2);
+                    freqStr = freq.ToString() + " kHz";
                 }
                 else
                 {
-                    freqUIStr = freq + " Hz";
+                    freq = Math.Round(freq);
+                    freqStr = freq + " Hz";
                 }
 
                 // Update UI
-                Program.MainWindow.FrequencyOffset = freqUIStr;
-
+                Program.MainWindow.FrequencyOffset = freqStr;
+                
                 Thread.Sleep(500);
             }
         }
@@ -201,72 +213,96 @@ namespace goesrecv_monitor
                     return;
                 }
 
-                // Convert to string and trim
-                string data = Encoding.ASCII.GetString(dres).TrimEnd('\0').TrimEnd('\n');
-
-                int vitErr;
-                int rsErr = 0;
-                bool locked;
+                // Tidy up raw data
+                string data;
                 try
                 {
-                    // Get Virerbi error count
-                    string vitStr = data.Substring(data.IndexOf("viterbi_errors") + 17);
-                    vitStr = vitStr.Substring(0, vitStr.IndexOf(','));
-                    vitErr = int.Parse(vitStr);
-
-                    // Get lock state
-                    string lockStr = data.Substring(data.IndexOf("ok") + 5, 1);
-                    if (lockStr == "1")
-                    {
-                        locked = true;
-                    }
-                    else
-                    {
-                        locked = false;
-                    }
-
-                    // Split data into lines
-                    rsErr = 0;
-                    string[] lines = data.Split('\n');
-                    foreach (string l in lines)
-                    {
-                        // Parse Line
-                        string rsStr = l.Substring(l.IndexOf("reed_solomon_errors") + 22);
-                        rsStr = rsStr.Substring(0, rsStr.IndexOf(','));
-
-                        if (rsStr != "-1")
-                        {
-                            rsErr += int.Parse(rsStr);
-                        }
-                    }
+                    data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
+                    data = data.TrimEnd('\0');                  // Trim trailing null bytes
+                    data = data.TrimEnd('\n');                  // Trim trailing newline
                 }
-                catch (ArgumentOutOfRangeException e)
+                catch (Exception e)
                 {
-                    Console.WriteLine("[DEMOD] Substring error");
+                    Console.WriteLine("[DECODER] Error trimming raw data");
                     continue;
                 }
 
-                // Cap viterbi in range for signal quality
-                float vitErrQ = vitErr;
-                float vitLower = 30f;
-                float vitUpper = 1000f;
-                if (vitErr < vitLower)
+
+                // Parse JSON objects
+                List<JObject> json = new List<JObject>();
+                string[] lines = data.Split('\n');
+                string errLine = "";
+                try
                 {
-                    vitErrQ = vitLower;
+                    // Loop through each JSON line
+                    foreach (string l in lines)
+                    {
+                        // Parse Line
+                        string line = l;
+                        if (line.IndexOf('{') != -1)
+                        {
+                            // Trim leading bytes before JSON string
+                            line = line.Substring(l.IndexOf('{'));
+                        }
+                        else
+                        {
+                            Console.WriteLine("[DECODER] No JSON object found");
+                            continue;
+                        }
+
+                        // Handle double open brace
+                        if (line.StartsWith("{{\""))
+                        {
+                            line = line.Substring(1);
+                        }
+
+                        errLine = line;
+                        json.Add(JObject.Parse(line));
+                    }
                 }
-                else if (vitErr > vitUpper)
+                catch (Newtonsoft.Json.JsonReaderException e)
                 {
-                    vitErrQ = vitUpper;
+                    Console.WriteLine("[DECODER] Error parsing JSON: {0}", e.ToString());
+                    Console.WriteLine("[DECODER] {0}", errLine);
+                    continue;
                 }
 
-                // Calculate signal quality
-                float sigQ = 100 - (((vitErrQ - vitLower) / (vitUpper - vitLower)) * 100);
+                // Signal lock indicator
+                bool locked = (int)json[0]["ok"] != 0;
 
+                // Signal quality
+                int vit = (int)json[0]["viterbi_errors"];
+                float vitLow = 30f;
+                float vitHigh = 1000f;
+                float sigQ;
+                sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
+
+                // Cap signal quality value
+                if (sigQ > 100)
+                {
+                    sigQ = 100;
+                }
+                else if (sigQ < 0)
+                {
+                    sigQ = 0;
+                }
+
+                // Count RS errors
+                int rs = 0;
+
+                foreach (JObject j in json)
+                {
+                    if ((int)j["reed_solomon_errors"] != -1)
+                    {
+                        rs += (int)j["reed_solomon_errors"];
+                    }
+                }
+                
                 // Update UI
                 Program.MainWindow.SignalLock = locked;
                 Program.MainWindow.SignalQuality = (int)sigQ;
-                Program.MainWindow.ViterbiErrors = vitErr;
-                Program.MainWindow.RSErrors = rsErr;
+                Program.MainWindow.ViterbiErrors = vit;
+                Program.MainWindow.RSErrors = rs;
 
                 Thread.Sleep(500);
             }

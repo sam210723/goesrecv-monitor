@@ -92,9 +92,8 @@ namespace goesrecv_monitor
                     return;
                 }
 
-                    List<Point> points = new List<Point>();
-
                 // Loop through bytes 2 at a time, skipping first 8
+                List<Point> points = new List<Point>();
                 for (int i = 8; i < 2048; i = i + 2)
                 {
                     sbyte symI = (sbyte) dres[i];
