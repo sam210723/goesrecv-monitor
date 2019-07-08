@@ -4,6 +4,19 @@ goesrecv Monitor is a software utility for monitoring the status of [goesrecv](h
 ![Screenshot](screenshot.png)
 
 ## Getting Started
-Pre-built Windows executables can be found in [Releases](https://github.com/sam210723/goesrecv-monitor/releases/latest). After downloading the latest ```goesrecv-monitor.zip```, extract all files and run ```goesrecv-monitor.exe```. Microsoft .NET Framework [v4.6.1](https://www.microsoft.com/en-au/download/details.aspx?id=49981) or later is required.
+Pre-built Windows executables can be found in [Releases](https://github.com/sam210723/goesrecv-monitor/releases/latest). Microsoft .NET Framework [v4.6.1](https://www.microsoft.com/en-au/download/details.aspx?id=49981) or later is required.
 
-Enter the IP address of a Raspberry Pi running goesrecv and click ```Connect``` (or hit enter). The constellation plot and statistics list will start showing data.
+Open your ```goesrecv.conf``` and confirm the following lines are not commented (remove ```#```).
+```
+[clock_recovery.sample_publisher]
+bind = "tcp://0.0.0.0:5002"
+send_buffer = 2097152
+
+[demodulator.stats_publisher]
+bind = "tcp://0.0.0.0:6001"
+
+[decoder.stats_publisher]
+bind = "tcp://0.0.0.0:6002"
+```
+
+After downloading the latest ```goesrecv-monitor.zip```, extract all files and run ```goesrecv-monitor.exe```. Enter the IP address of a Raspberry Pi running goesrecv and click ```Connect``` (or hit enter). The constellation plot and statistics list will start showing data.
