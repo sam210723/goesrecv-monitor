@@ -42,8 +42,8 @@
             this.textIP = new System.Windows.Forms.TextBox();
             this.btnConnct = new System.Windows.Forms.Button();
             this.constellationPanel = new goesrecv_monitor.ConstellationPanel();
-            this.labelSite = new System.Windows.Forms.LinkLabel();
             this.labelVersion = new System.Windows.Forms.LinkLabel();
+            this.labelSite = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.constellationPanel.SuspendLayout();
             this.SuspendLayout();
@@ -194,11 +194,11 @@
             // 
             this.textIP.BackColor = System.Drawing.Color.White;
             this.textIP.ForeColor = System.Drawing.Color.White;
-            this.textIP.Location = new System.Drawing.Point(578, 115);
+            this.textIP.Location = new System.Drawing.Point(574, 115);
             this.textIP.MaxLength = 15;
             this.textIP.Multiline = true;
             this.textIP.Name = "textIP";
-            this.textIP.Size = new System.Drawing.Size(86, 20);
+            this.textIP.Size = new System.Drawing.Size(90, 20);
             this.textIP.TabIndex = 2;
             this.textIP.Text = "192.168.1.";
             this.textIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textIP_KeyPress);
@@ -207,9 +207,9 @@
             // 
             this.btnConnct.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConnct.ForeColor = System.Drawing.Color.White;
-            this.btnConnct.Location = new System.Drawing.Point(577, 143);
+            this.btnConnct.Location = new System.Drawing.Point(573, 143);
             this.btnConnct.Name = "btnConnct";
-            this.btnConnct.Size = new System.Drawing.Size(88, 27);
+            this.btnConnct.Size = new System.Drawing.Size(92, 27);
             this.btnConnct.TabIndex = 3;
             this.btnConnct.Text = "Connect";
             this.btnConnct.UseVisualStyleBackColor = true;
@@ -219,24 +219,14 @@
             // 
             this.constellationPanel.Controls.Add(this.labelVersion);
             this.constellationPanel.Controls.Add(this.labelSite);
+            this.constellationPanel.LineColor = System.Drawing.Color.DarkSlateGray;
             this.constellationPanel.Location = new System.Drawing.Point(0, 0);
             this.constellationPanel.Name = "constellationPanel";
             this.constellationPanel.Size = new System.Drawing.Size(350, 183);
+            this.constellationPanel.SymbolColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
+            this.constellationPanel.SymbolScale = 1.75F;
+            this.constellationPanel.SymbolSize = 5;
             this.constellationPanel.TabIndex = 16;
-            // 
-            // labelSite
-            // 
-            this.labelSite.ActiveLinkColor = System.Drawing.Color.Silver;
-            this.labelSite.AutoSize = true;
-            this.labelSite.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSite.LinkColor = System.Drawing.Color.DimGray;
-            this.labelSite.Location = new System.Drawing.Point(286, 167);
-            this.labelSite.Name = "labelSite";
-            this.labelSite.Size = new System.Drawing.Size(61, 13);
-            this.labelSite.TabIndex = 17;
-            this.labelSite.TabStop = true;
-            this.labelSite.Text = "vksdr.com";
-            this.labelSite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelSite_LinkClicked);
             // 
             // labelVersion
             // 
@@ -251,6 +241,20 @@
             this.labelVersion.TabStop = true;
             this.labelVersion.Text = "VER";
             this.labelVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelVersion_LinkClicked);
+            // 
+            // labelSite
+            // 
+            this.labelSite.ActiveLinkColor = System.Drawing.Color.Silver;
+            this.labelSite.AutoSize = true;
+            this.labelSite.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSite.LinkColor = System.Drawing.Color.DimGray;
+            this.labelSite.Location = new System.Drawing.Point(286, 167);
+            this.labelSite.Name = "labelSite";
+            this.labelSite.Size = new System.Drawing.Size(61, 13);
+            this.labelSite.TabIndex = 17;
+            this.labelSite.TabStop = true;
+            this.labelSite.Text = "vksdr.com";
+            this.labelSite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelSite_LinkClicked);
             // 
             // Main
             // 
