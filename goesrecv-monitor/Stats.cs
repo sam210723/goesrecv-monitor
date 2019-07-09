@@ -275,7 +275,15 @@ namespace goesrecv_monitor
                 }
 
                 // Signal lock indicator
-                bool locked = (int)json[0]["ok"] != 0;
+                bool locked;
+                if (json[0]["ok"] != null)
+                {
+                    locked = (int)json[0]["ok"] != 0;
+                }
+                else
+                {
+                    locked = false;
+                }
 
                 // Signal quality
                 int vit = (int)json[0]["viterbi_errors"];
@@ -296,7 +304,6 @@ namespace goesrecv_monitor
 
                 // Count RS errors
                 int rs = 0;
-
                 foreach (JObject j in json)
                 {
                     if ((int)j["reed_solomon_errors"] != -1)
