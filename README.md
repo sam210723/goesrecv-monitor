@@ -4,7 +4,7 @@ goesrecv Monitor is a software utility for monitoring the status of [goesrecv](h
 ![Screenshot](screenshot.png)
 
 ## Getting Started
-Pre-built Windows executables can be found in [Releases](https://github.com/sam210723/goesrecv-monitor/releases/latest). Microsoft .NET Framework [v4.6.1](https://www.microsoft.com/en-au/download/details.aspx?id=49981) or later is required.
+Pre-built Windows executables can be found in [Releases](https://github.com/sam210723/goesrecv-monitor/releases/latest). Microsoft .NET Framework [v4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48) or later is required.
 
 Open your ```goesrecv.conf``` file and confirm the following lines are not commented (remove ```#```), then restart goesrecv.
 ```
