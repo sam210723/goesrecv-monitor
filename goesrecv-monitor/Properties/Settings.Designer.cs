@@ -38,9 +38,9 @@ namespace goesrecv_monitor.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool debug {
+        public bool logging {
             get {
-                return ((bool)(this["debug"]));
+                return ((bool)(this["logging"]));
             }
         }
     }

@@ -5,7 +5,7 @@
     <Setting Name="IP" Type="System.String" Scope="User">
       <Value Profile="(Default)">192.168.</Value>
     </Setting>
-    <Setting Name="debug" Type="System.Boolean" Scope="Application">
+    <Setting Name="logging" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
