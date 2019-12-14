@@ -79,12 +79,12 @@ namespace goesrecv_monitor
                 string time;
                 if (src != "")
                 {
-                    string now = DateTime.Now.ToString("dd/MM/yyyy][HH:mm:ss.fff");
+                    string now = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff");
                     time = string.Format("[{0}]", now);
                 }
                 else
                 {
-                    time = "".PadRight(26);
+                    time = "".PadRight(25);
                 }
 
                 // Format src string
@@ -98,7 +98,7 @@ namespace goesrecv_monitor
                 }
 
                 // Build log string
-                string s = string.Format("{0}{1}{2}", time, src, msg);
+                string s = string.Format("{0} {1}  {2}", time, src, msg);
 
                 Console.WriteLine(s);
                 logf.Flush();
