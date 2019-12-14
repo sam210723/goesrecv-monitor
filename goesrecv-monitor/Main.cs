@@ -14,9 +14,7 @@ namespace goesrecv_monitor
             InitializeComponent();
 
             // Set version label
-            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            labelVersion.Text = "v" + fvi.FileVersion;
+            labelVersion.Text = "v" + Program.GetVersion();
 
             // Validate saved IP
             string IP = Properties.Settings.Default.IP;

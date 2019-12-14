@@ -54,6 +54,16 @@ namespace goesrecv_monitor
 
             // Write application info to log
             Log("PROGRAM", "APPLICATION STARTED");
+            Log("", string.Format("goesrecv monitor v{0}", GetVersion()));
+
+            string arch = Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit";
+            Log("", string.Format("{0} {1}" , Environment.OSVersion.ToString(), arch));
+            
+            Log("", AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName);
+
+            Log("", string.Format("{0} CPUs", Environment.ProcessorCount));
+            Log("", string.Format("{0} process", Environment.Is64BitProcess ? "64-bit" : "32-bit"));
+            Log("", "");
         }
 
 
@@ -109,7 +119,7 @@ namespace goesrecv_monitor
 
             if (logf != null && logging)
             {
-                Log("PROGRAM", "Closing log file");
+                Log("", "------------------------------------------\n");
                 logf.Close();
             }
         }
@@ -118,7 +128,7 @@ namespace goesrecv_monitor
         /// <summary>
         /// Returns the current assembly version
         /// </summary>
-        static string GetVersion()
+        public static string GetVersion()
         {
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
