@@ -11,6 +11,7 @@ namespace goesrecv_monitor
 
         public static StreamWriter logf;
         public static bool logging;
+        static string logsrc = "PROGRAM";
 
 
         /// <summary>
@@ -24,11 +25,17 @@ namespace goesrecv_monitor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Log(logsrc, "Creating instance of Main()");
             MainWindow = new Main();
+
+            Log(logsrc, "Running Main()");
             Application.Run(MainWindow);
         }
 
 
+        /// <summary>
+        /// Setup log file
+        /// </summary>
         static void SetupLog()
         {
             // Get logging flag from settings
@@ -53,17 +60,14 @@ namespace goesrecv_monitor
             }
 
             // Write application info to log
-            Log("PROGRAM", "APPLICATION STARTED");
-            Log("", string.Format("goesrecv monitor v{0}", GetVersion()));
+            Log(logsrc, string.Format("goesrecv monitor v{0}", GetVersion()));
 
             string arch = Environment.Is64BitOperatingSystem ? "64-bit" : "32-bit";
-            Log("", string.Format("{0} {1}" , Environment.OSVersion.ToString(), arch));
+            Log(null, string.Format("{0} {1}" , Environment.OSVersion.ToString(), arch));
             
-            Log("", AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName);
+            Log(null, AppDomain.CurrentDomain.SetupInformation.TargetFrameworkName);
 
-            Log("", string.Format("{0} CPUs", Environment.ProcessorCount));
-            Log("", string.Format("{0} process", Environment.Is64BitProcess ? "64-bit" : "32-bit"));
-            Log("", "");
+            Log(null, string.Format("{0} CPUs, {1} process", Environment.ProcessorCount, Environment.Is64BitProcess ? "64-bit" : "32-bit"));
         }
 
 
@@ -77,7 +81,7 @@ namespace goesrecv_monitor
             {
                 // Get timestamp
                 string time;
-                if (src != "")
+                if (src != null)
                 {
                     string now = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss.fff");
                     time = string.Format("[{0}]", now);
@@ -88,7 +92,7 @@ namespace goesrecv_monitor
                 }
 
                 // Format src string
-                if (src != "")
+                if (src != null)
                 {
                     src = string.Format("[{0}]", src).PadRight(10);
                 }
@@ -111,15 +115,17 @@ namespace goesrecv_monitor
         /// </summary>
         public static void GracefulExit()
         {
-            Log("PROGRAM", "Stopping STATS threads");
+            Log(logsrc, "Graceful exit triggered");
+
+            Log(logsrc, "Stopping STATS threads");
             Stats.Stop();
 
-            Log("PROGRAM", "Stopping SYMBOL thread");
+            Log(logsrc, "Stopping SYMBOL thread");
             Symbols.Stop();
 
             if (logf != null && logging)
             {
-                Log("", "------------------------------------------\n");
+                Log(null, "------------------------------------------\n");
                 logf.Close();
             }
         }

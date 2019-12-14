@@ -9,6 +9,8 @@ namespace goesrecv_monitor
 {
     public partial class Main : Form
     {
+        string logsrc = "MAIN";
+
         public Main()
         {
             InitializeComponent();
@@ -22,10 +24,12 @@ namespace goesrecv_monitor
             if (IPAddress.TryParse(IP, out temp))
             {
                 textIP.Text = IP;
+                Program.Log(logsrc, string.Format("IP: {0} (recalled)", IP));
             }
             else
             {
                 textIP.Text = "192.168.";
+                Program.Log(logsrc, "IP: 192.168.");
             }
 
             // Set control colours
@@ -34,6 +38,8 @@ namespace goesrecv_monitor
             constellationPanel.BackColor = Color.FromArgb(255, 20, 20, 20);
             labelVersion.BackColor = Color.FromArgb(255, 20, 20, 20);
             labelSite.BackColor = Color.FromArgb(255, 20, 20, 20);
+
+            Program.Log(logsrc, "Main() initialised");
         }
 
         /// <summary>
@@ -61,6 +67,8 @@ namespace goesrecv_monitor
         {
             if (Stats.Running)
             {
+                Program.Log(logsrc, "DISCONNECT");
+
                 // Stop threads
                 Stats.Stop();
                 Symbols.Stop();
@@ -69,10 +77,13 @@ namespace goesrecv_monitor
             }
             else
             {
+                Program.Log(logsrc, "CONNECT");
+
                 // Validate IP address
                 IPAddress temp;
                 if (!IPAddress.TryParse(textIP.Text, out temp))
                 {
+                    Program.Log(logsrc, string.Format("Invalid IP: {0}", textIP.Text));
                     MessageBox.Show(this, "Invalid IP address", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
