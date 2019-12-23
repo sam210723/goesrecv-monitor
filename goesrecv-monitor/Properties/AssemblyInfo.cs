@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("goesrecv Monitor")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Status monitor for goesrecv xRIT demodulator and decoder.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("goesrecv-monitor")]
