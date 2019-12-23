@@ -117,24 +117,18 @@ namespace goesrecv_monitor
                     return;
                 }
 
-                // Tidy up raw data
-                string data;
+                string data = Encoding.ASCII.GetString(dres);   // Convert to ASCII;
                 string line;
-                data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
-                data = data.Replace("\0", "");              // Remove null bytes
-                data = data.Replace("\n", "");              // Remove newlines
-                data = data.Replace("|", "");               // Remove pipes (?)
-
                 try
                 {
+                    // Tidy up raw data
+                    data = data.Replace("\0", "");              // Remove null bytes
+                    data = data.Replace("\n", "");              // Remove newlines
+                    data = data.Replace("{{", "{");             // Remove double braces
+                    data = data.Replace("|", "");               // Remove pipes (?)
+
                     // JSON object substring
                     line = data.Substring(data.IndexOf('{'), data.IndexOf('}') + 1);
-
-                    // Handle double open brace
-                    if (line.StartsWith("{{\""))
-                    {
-                        line = line.Substring(1);
-                    }
 
                     // Write cleaned line to log
                     Program.Log(logsrc, string.Format("OK: {0}", line));
@@ -186,6 +180,9 @@ namespace goesrecv_monitor
                     freq = Math.Round(freq);
                     freqStr = freq + " Hz";
                 }
+
+                // Write parsed data to log
+                Program.Log(null, string.Format("FREQUENCY: {0}", freqStr));
 
                 // Update UI
                 Program.MainWindow.FrequencyOffset = freqStr;
@@ -246,13 +243,17 @@ namespace goesrecv_monitor
                     return;
                 }
 
-                // Tidy up raw data
-                string data;
+                string data = Encoding.ASCII.GetString(dres);   // Convert to ASCII
                 try
                 {
-                    data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
-                    data = data.TrimEnd('\0');                  // Trim trailing null bytes
-                    data = data.TrimEnd('\n');                  // Trim trailing newline
+                    // Tidy up raw data
+                    data = data.Replace("\0", "");              // Remove null bytes
+                    data = data.Replace("{{", "{");             // Remove double braces
+                    data = data.Replace("|", "");               // Remove pipes (?)
+                    data = data.TrimEnd('\n');                  // Remove trailing newline
+
+                    // Write cleaned line to log
+                    Program.Log(logsrc, string.Format("OK: {0}", data.Replace("\n", "")));
                 }
                 catch (Exception e)
                 {
@@ -338,7 +339,10 @@ namespace goesrecv_monitor
                         rs += (int)j["reed_solomon_errors"];
                     }
                 }
-                
+
+                // Write parsed data to log
+                Program.Log(null, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
+
                 // Update UI
                 Program.MainWindow.SignalLock = locked;
                 Program.MainWindow.SignalQuality = (int)sigQ;
