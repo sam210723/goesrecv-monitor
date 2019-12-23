@@ -4,9 +4,7 @@
 <p align="center"><img src="screenshot.png"></p>
 
 ## Getting Started
-Microsoft [.NET Framework v4.8](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer) (or later) is required to run **goesrecv Monitor**.
-
-Once .NET is installed, download the [latest release](https://github.com/sam210723/goesrecv-monitor/releases/latest/download/goesrecv-monitor.zip) and extract all files inside the ZIP to a new folder.
+Microsoft [.NET Framework v4.8](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer) (or later) is required to run **goesrecv Monitor**. Once .NET is installed, download the [latest release](https://github.com/sam210723/goesrecv-monitor/releases/latest/download/goesrecv-monitor.zip) and extract all files inside the ZIP to a new folder.
 
 Open your ```goesrecv.conf``` file and confirm the following lines are not commented (remove ```#```), then restart goesrecv.
 ```
