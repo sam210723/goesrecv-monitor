@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-/// <summary>
-/// Soft-symbol connection and data handler
-/// </summary>
 namespace goesrecv_monitor
 {
+    /// <summary>
+    /// Soft-symbol connection and data handler
+    /// </summary>
     class Symbols
     {
         static Thread SymbolThread;

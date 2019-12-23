@@ -120,11 +120,14 @@ namespace goesrecv_monitor
                 // Tidy up raw data
                 string data;
                 string line;
+                data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
+                data = data.Replace("\0", "");              // Remove null bytes
+                data = data.Replace("\n", "");              // Remove newlines
+                data = data.Replace("|", "");               // Remove pipes (?)
+
                 try
                 {
-                    data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
-                    data = data.TrimEnd('\0');                  // Trim trailing null bytes
-                    data = data.TrimEnd('\n');                  // Trim trailing newline
+                    // JSON object substring
                     line = data.Substring(data.IndexOf('{'), data.IndexOf('}') + 1);
 
                     // Handle double open brace
@@ -132,10 +135,27 @@ namespace goesrecv_monitor
                     {
                         line = line.Substring(1);
                     }
+
+                    // Write cleaned line to log
+                    Program.Log(logsrc, string.Format("OK: {0}", line));
                 }
                 catch (Exception e)
                 {
-                    Program.Log(logsrc, string.Format("Error trimming raw data: {0}", e.Message.Replace("\r\n", " | ")));
+                    Program.Log(logsrc, "Error trimming raw data:");
+
+                    // Print exception line-by-line
+                    string[] elines = e.Message.Split('\r');
+                    foreach (string l in elines) {
+                        string ln = l.Replace("\r", "");
+                        ln = ln.Replace("\n", "");
+
+                        Program.Log(logsrc, ln);
+                    }
+
+                    // Write bad line to log
+                    Program.Log(logsrc, string.Format("BAD: {0}", data));
+
+                    // Skip parsing
                     continue;
                 }
 
@@ -236,7 +256,8 @@ namespace goesrecv_monitor
                 }
                 catch (Exception e)
                 {
-                    Program.Log(logsrc, string.Format("Error trimming raw data: {0}", e.Message.Replace("\r\n", " | ")));
+                    Program.Log(logsrc, string.Format("Error trimming raw data: {0}", e.Message.Replace("\r\n", ": ")));
+                    Program.Log(logsrc, Encoding.ASCII.GetString(dres));
                     continue;
                 }
 
