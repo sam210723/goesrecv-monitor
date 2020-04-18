@@ -1,5 +1,10 @@
-# goesrecv monitor
-**goesrecv monitor** is a software utility for monitoring the status of [goesrecv](https://github.com/pietern/goestools) by [Pieter Noordhuis](https://twitter.com/pnoordhuis). goesrecv is a BPSK demodulator and CCSDS decoder for LRIT and HRIT downlinks transmitted by geostationary weather satellites like GOES-16/17 and GK-2A.
+# goesrecv Monitor
+
+[![GitHub release](https://img.shields.io/github/release/sam210723/goesrecv-monitor.svg)](https://github.com/sam210723/goesrecv-monitor/releases/latest)
+[![Github all releases](https://img.shields.io/github/downloads/sam210723/goesrecv-monitor/total.svg)](https://github.com/sam210723/goesrecv-monitor/releases/latest)
+[![GitHub license](https://img.shields.io/github/license/sam210723/goesrecv-monitor.svg)](https://github.com/sam210723/goesrecv-monitor/master/LICENSE)
+
+goesrecv Monitor is a software utility for monitoring the status of [goesrecv](https://github.com/pietern/goestools) by [Pieter Noordhuis](https://twitter.com/pnoordhuis). goesrecv is a BPSK demodulator and CCSDS decoder for LRIT and HRIT downlinks transmitted by geostationary weather satellites like GOES-16/17 and GK-2A.
 
 <p align="center"><img src="screenshot.png"></p>
 
