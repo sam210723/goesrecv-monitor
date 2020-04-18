@@ -6,7 +6,7 @@
       <Value Profile="(Default)">192.168.</Value>
     </Setting>
     <Setting Name="logging" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
