@@ -22,3 +22,17 @@ bind = "tcp://0.0.0.0:6002"
 Finally, open **goesrecv monitor** and enter the IP address of a device running goesrecv, then click ```Connect``` (or hit enter). The constellation plot and statistics list will start showing data.
 
 If **goesrecv monitor** fails to connect, check for firewalls on the device running goesrecv. Inbound connections on ports ```5002```, ```6001``` and ```6002``` must be allowed.
+
+## Debug Logs
+**goesrecv monitor** can log certain information to a text file for the purposes of debugging crashes or configuration issues. Changing the ```logging``` setting in ```goesrecv-monitor.exe.config``` to either ```True``` or ```False``` will enable or disable the log file.
+```
+<setting name="logging" serializeAs="String">
+    <value>False</value>
+</setting>
+```
+
+```
+<setting name="logging" serializeAs="String">
+    <value>True</value>
+</setting>
+```
