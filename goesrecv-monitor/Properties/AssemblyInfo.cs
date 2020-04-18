@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("goesrecv-monitor")]
-[assembly: AssemblyCopyright("Copyright © sam210723 2019")]
+[assembly: AssemblyCopyright("Copyright © sam210723 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
