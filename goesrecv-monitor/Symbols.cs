@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-/// <summary>
-/// Soft-symbol connection and data handler
-/// </summary>
 namespace goesrecv_monitor
 {
+    /// <summary>
+    /// Soft-symbol connection and data handler
+    /// </summary>
     class Symbols
     {
         static Thread SymbolThread;
@@ -35,7 +35,7 @@ namespace goesrecv_monitor
         {
             if (SymbolThread != null)
             {
-                Console.WriteLine("[SYMBOL] Stopping");
+                Program.Log("SYMBOL", "Stopping");
                 SymbolThread.Abort();
             }
         }
@@ -46,15 +46,17 @@ namespace goesrecv_monitor
         /// </summary>
         static void SymbolLoop()
         {
-            Console.WriteLine("[SYMBOL] Started");
+            string logsrc = "SYMBOL";
+            Program.Log(logsrc, "START");
 
             Socket s = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            Program.Log(logsrc, "Socket created");
 
             try
             {
                 // Connect socket
                 s.Connect(IP, SymbolPort);
-                Console.WriteLine("[SYMBOL] Connected to {0}:{1}", IP, SymbolPort.ToString());
+                Program.Log(logsrc, string.Format("Connected to {0}:{1}", IP, SymbolPort.ToString()));
 
                 // Send nanomsg init message
                 s.Send(nninit);
@@ -64,17 +66,17 @@ namespace goesrecv_monitor
                 int bytesRec = s.Receive(res);
                 if (res.SequenceEqual(nnires))
                 {
-                    Console.WriteLine("[SYMBOL] Nanomsg OK");
+                    Program.Log(logsrc, "nanomsg OK");
                 }
                 else
                 {
                     string resHex = BitConverter.ToString(res);
-                    Console.WriteLine("[SYMBOL] Nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires));
+                    Program.Log(logsrc, string.Format("nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires)));
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("[SYMBOL] Failed to connect");
+                Program.Log(logsrc, "Failed to connect");
                 Stop();
                 return;
             }
@@ -87,7 +89,7 @@ namespace goesrecv_monitor
                 // Kill thread if no data received
                 if (numbytes == 0)
                 {
-                    Console.WriteLine("[SYMBOL] No data");
+                    Program.Log(logsrc, "Connection lost/no data, killing thread");
                     Stop();
                     return;
                 }

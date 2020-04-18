@@ -42,8 +42,10 @@ namespace goesrecv_monitor
         {
             if (DemodThread != null && DecoderThread != null)
             {
-                Console.WriteLine("[DEMOD] Stopping\n[DECODER] Stopping");
+                Program.Log("DEMOD", "Stopping");
                 DemodThread.Abort();
+
+                Program.Log("DECODER", "Stopping");
                 DecoderThread.Abort();
             }
         }
@@ -54,15 +56,17 @@ namespace goesrecv_monitor
         /// </summary>
         static void DemodLoop()
         {
-            Console.WriteLine("[DEMOD] Started");
+            string logsrc = "DEMOD";
+            Program.Log(logsrc, "START");
 
             Socket s = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            Program.Log(logsrc, "Socket created");
 
             try
             {
                 // Connect socket
                 s.Connect(IP, DemodPort);
-                Console.WriteLine("[DEMOD] Connected to {0}:{1}", IP, DemodPort.ToString());
+                Program.Log(logsrc, string.Format("Connected to {0}:{1}", IP, DemodPort.ToString()));
 
                 // Send nanomsg init message
                 s.Send(nninit);
@@ -72,17 +76,17 @@ namespace goesrecv_monitor
                 s.Receive(res);
                 if (res.SequenceEqual(nnires))
                 {
-                    Console.WriteLine("[DEMOD] Nanomsg OK");
+                    Program.Log(logsrc, "nanomsg OK");
                 }
                 else
                 {
                     string resHex = BitConverter.ToString(res);
-                    Console.WriteLine("[DEMOD] Nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires));
+                    Program.Log(logsrc, string.Format("nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires)));
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("[DEMOD] Failed to connect");
+                Program.Log(logsrc, "Failed to connect");
 
                 // Reset UI and alert user
                 Program.MainWindow.ResetUI();
@@ -102,7 +106,7 @@ namespace goesrecv_monitor
                 // Kill thread if no data received
                 if (numbytes == 0)
                 {
-                    Console.WriteLine("[DEMOD] No data");
+                    Program.Log(logsrc, "Connection lost/no data, killing thread");
 
                     // Reset UI and alert user
                     Program.MainWindow.ResetUI();
@@ -113,25 +117,39 @@ namespace goesrecv_monitor
                     return;
                 }
 
-                // Tidy up raw data
-                string data;
+                string data = Encoding.ASCII.GetString(dres);   // Convert to ASCII;
                 string line;
                 try
                 {
-                    data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
-                    data = data.TrimEnd('\0');                  // Trim trailing null bytes
-                    data = data.TrimEnd('\n');                  // Trim trailing newline
+                    // Tidy up raw data
+                    data = data.Replace("\0", "");              // Remove null bytes
+                    data = data.Replace("\n", "");              // Remove newlines
+                    data = data.Replace("{{", "{");             // Remove double braces
+                    data = data.Replace("|", "");               // Remove pipes (?)
+
+                    // JSON object substring
                     line = data.Substring(data.IndexOf('{'), data.IndexOf('}') + 1);
 
-                    // Handle double open brace
-                    if (line.StartsWith("{{\""))
-                    {
-                        line = line.Substring(1);
-                    }
+                    // Write cleaned line to log
+                    Program.Log(logsrc, string.Format("OK: {0}", line));
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[DEMOD] Error trimming raw data");
+                    Program.Log(logsrc, "Error trimming raw data:");
+
+                    // Print exception line-by-line
+                    string[] elines = e.Message.Split('\r');
+                    foreach (string l in elines) {
+                        string ln = l.Replace("\r", "");
+                        ln = ln.Replace("\n", "");
+
+                        Program.Log(logsrc, ln);
+                    }
+
+                    // Write bad line to log
+                    Program.Log(logsrc, string.Format("BAD: {0}", data));
+
+                    // Skip parsing
                     continue;
                 }
 
@@ -143,8 +161,8 @@ namespace goesrecv_monitor
                 }
                 catch (Newtonsoft.Json.JsonReaderException e)
                 {
-                    Console.WriteLine("[DEMOD] Error parsing JSON: {0}", e.ToString());
-                    Console.WriteLine("[DEMOD] {0}", line);
+                    Program.Log(logsrc, string.Format("Error parsing JSON: {0}", e.ToString()));
+                    Program.Log(null, line);
                     continue;
                 }
 
@@ -163,6 +181,9 @@ namespace goesrecv_monitor
                     freqStr = freq + " Hz";
                 }
 
+                // Write parsed data to log
+                Program.Log(null, string.Format("FREQUENCY: {0}", freqStr));
+
                 // Update UI
                 Program.MainWindow.FrequencyOffset = freqStr;
                 
@@ -175,15 +196,17 @@ namespace goesrecv_monitor
         /// </summary>
         static void DecoderLoop()
         {
-            Console.WriteLine("[DECODER] Started");
+            string logsrc = "DECODER";
+            Program.Log(logsrc, "START");
 
             Socket s = new Socket(SocketType.Stream, ProtocolType.Tcp);
+            Program.Log(logsrc, "Socket created");
 
             try
             {
                 // Connect socket
                 s.Connect(IP.ToString(), DecoderPort);
-                Console.WriteLine("[DECODER] Connected to {0}:{1}", IP, DecoderPort.ToString());
+                Program.Log(logsrc, string.Format("Connected to {0}:{1}", IP, DecoderPort.ToString()));
 
                 // Send nanomsg init message
                 s.Send(nninit);
@@ -193,17 +216,17 @@ namespace goesrecv_monitor
                 int bytesRec = s.Receive(res);
                 if (res.SequenceEqual(nnires))
                 {
-                    Console.WriteLine("[DECODER] Nanomsg OK");
+                    Program.Log(logsrc, "nanomsg OK");
                 }
                 else
                 {
                     string resHex = BitConverter.ToString(res);
-                    Console.WriteLine("[DECODER] Nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires));
+                    Program.Log(logsrc, string.Format("nanomsg error: {0} (Expected: {1})", resHex, BitConverter.ToString(nnires)));
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("[DECODER] Failed to connect");
+                Program.Log(logsrc, "Failed to connect");
                 return;
             }
 
@@ -216,21 +239,26 @@ namespace goesrecv_monitor
                 // Kill thread if no data received
                 if (numbytes == 0)
                 {
-                    Console.WriteLine("[DECODER] No data");
+                    Program.Log(logsrc, "Connection lost/no data, killing thread");
                     return;
                 }
 
-                // Tidy up raw data
-                string data;
+                string data = Encoding.ASCII.GetString(dres);   // Convert to ASCII
                 try
                 {
-                    data = Encoding.ASCII.GetString(dres);      // Convert to ASCII
-                    data = data.TrimEnd('\0');                  // Trim trailing null bytes
-                    data = data.TrimEnd('\n');                  // Trim trailing newline
+                    // Tidy up raw data
+                    data = data.Replace("\0", "");              // Remove null bytes
+                    data = data.Replace("{{", "{");             // Remove double braces
+                    data = data.Replace("|", "");               // Remove pipes (?)
+                    data = data.TrimEnd('\n');                  // Remove trailing newline
+
+                    // Write cleaned line to log
+                    Program.Log(logsrc, string.Format("OK: {0}", data.Replace("\n", "")));
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[DECODER] Error trimming raw data");
+                    Program.Log(logsrc, string.Format("Error trimming raw data: {0}", e.Message.Replace("\r\n", ": ")));
+                    Program.Log(logsrc, Encoding.ASCII.GetString(dres));
                     continue;
                 }
 
@@ -253,7 +281,7 @@ namespace goesrecv_monitor
                         }
                         else
                         {
-                            Console.WriteLine("[DECODER] No JSON object found");
+                            Program.Log(logsrc, "No JSON object found");
                             continue;
                         }
 
@@ -269,8 +297,8 @@ namespace goesrecv_monitor
                 }
                 catch (Newtonsoft.Json.JsonReaderException e)
                 {
-                    Console.WriteLine("[DECODER] Error parsing JSON: {0}", e.ToString());
-                    Console.WriteLine("[DECODER] {0}", errLine);
+                    Program.Log(logsrc, string.Format("Error parsing JSON: {0}", e.ToString()));
+                    Program.Log(null, errLine);
                     continue;
                 }
 
@@ -311,7 +339,10 @@ namespace goesrecv_monitor
                         rs += (int)j["reed_solomon_errors"];
                     }
                 }
-                
+
+                // Write parsed data to log
+                Program.Log(null, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
+
                 // Update UI
                 Program.MainWindow.SignalLock = locked;
                 Program.MainWindow.SignalQuality = (int)sigQ;
