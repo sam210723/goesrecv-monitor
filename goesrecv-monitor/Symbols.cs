@@ -94,22 +94,8 @@ namespace goesrecv_monitor
                     return;
                 }
 
-                // Loop through bytes 2 at a time, skipping first 8
-                List<Point> points = new List<Point>();
-                for (int i = 8; i < 2048; i = i + 2)
-                {
-                    sbyte symI = (sbyte) dres[i];
-                    sbyte symQ = (sbyte) dres[i + 1];
-
-                    // Ignore null values
-                    if (symI != '\0' && symQ != '\0')
-                    {
-                        points.Add(new Point(symI, symQ));
-                    }
-                }
-
                 // Update UI
-                Program.MainWindow.DrawSymbols(points);
+                Program.MainWindow.DrawSymbols(dres);
 
                 Thread.Sleep(10);
             }

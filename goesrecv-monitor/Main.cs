@@ -49,17 +49,17 @@ namespace goesrecv_monitor
         /// Draws symbols on constellation plot
         /// </summary>
         /// <param name="points">List of Point objects representing symbols</param>
-        public void DrawSymbols(List<Point> points)
+        public void DrawSymbols(byte[] s)
         {
             if (constellationPanel.InvokeRequired)
             {
                 constellationPanel.Invoke((MethodInvoker)(() => {
-                    constellationPanel.DrawSymbols(points);
+                    constellationPanel.DrawSymbols(s);
                 }));
             }
             else
             {
-                constellationPanel.DrawSymbols(points);
+                constellationPanel.DrawSymbols(s);
             }
         }
 

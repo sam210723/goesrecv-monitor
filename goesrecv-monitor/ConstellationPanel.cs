@@ -9,7 +9,7 @@ namespace goesrecv_monitor
     class ConstellationPanel : Panel
     {
         // Globals
-        private List<Point> Symbols;
+        private byte[] Symbols;
         private Brush SymbolBrush;
         private Point Center;
         private Pen LinePen;
@@ -52,12 +52,18 @@ namespace goesrecv_monitor
             // Skip symbols if none provided
             if (Symbols == null) { return; }
 
-            foreach (Point sym in Symbols)
+            for (int i = 8; i < 2048; i = i + 2)
             {
-                // Draw point
-                float sX = Center.X + (sym.X * SymbolScale) - (SymbolSize / 2);
-                float sY = Center.Y + (sym.Y * SymbolScale) - (SymbolSize / 2);
-                g.FillEllipse(SymbolBrush, sX, sY, SymbolSize, SymbolSize);
+                sbyte symI = (sbyte) Symbols[i];
+                sbyte symQ = (sbyte) Symbols[i + 1];
+
+                // Ignore null values
+                if (symI != '\0' && symQ != '\0')
+                {
+                    float sX = Center.X + (symI * SymbolScale) - (SymbolSize / 2);
+                    float sY = Center.Y + (symQ * SymbolScale) - (SymbolSize / 2);
+                    g.FillEllipse(SymbolBrush, sX, sY, SymbolSize, SymbolSize);
+                }
             }
         }
 
@@ -65,7 +71,7 @@ namespace goesrecv_monitor
         /// Draws symbols on the constellation plot
         /// </summary>
         /// <param name="s">List of Point objects representing symbols</param>
-        public void DrawSymbols(List<Point> s)
+        public void DrawSymbols(byte[] s)
         {
             // Set global symbol list
             Symbols = s;
@@ -74,6 +80,9 @@ namespace goesrecv_monitor
             Invalidate();
         }
         
+        /// <summary>
+        /// Draw constellation lines
+        /// </summary>
         protected void DrawLines(Graphics g) {
             // Draw BPSK line
             g.DrawLine(
