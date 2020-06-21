@@ -81,9 +81,9 @@ namespace goesrecv_monitor
                 return;
             }
 
+            byte[] dres = new byte[65536];
             while (true)
             {
-                byte[] dres = new byte[65536];
                 int numbytes = s.Receive(dres);
 
                 // Kill thread if no data received
