@@ -185,6 +185,22 @@ namespace goesrecv_monitor
 
             constellationPanel.Invalidate();
         }
+
+        /// <summary>
+        /// Swap between BPSK and QPSK mode on Constellation Panel click
+        /// </summary>
+        private void constellationPanel_Click(object sender, EventArgs e)
+        {
+            if (constellationPanel.Order == 4)
+            {
+                ChangeOrder(2);
+            }
+            else
+            {
+                ChangeOrder(4);
+            }
+        }
+
         /// <summary>
         /// Triggers graceful exit
         /// </summary>
