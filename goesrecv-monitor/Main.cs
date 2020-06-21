@@ -32,6 +32,9 @@ namespace goesrecv_monitor
                 Program.Log(logsrc, "IP: 192.168.");
             }
 
+            // Set constellation order and update UI
+            ChangeOrder(Properties.Settings.Default.order);
+
             // Set control colours
             btnConnct.BackColor = Color.FromArgb(255, 30, 30, 30);
             textIP.BackColor = Color.FromArgb(255, 30, 30, 30);
@@ -184,6 +187,10 @@ namespace goesrecv_monitor
             }
 
             constellationPanel.Invalidate();
+
+            // Save order
+            Properties.Settings.Default.order = order;
+            Properties.Settings.Default.Save();
         }
 
         /// <summary>

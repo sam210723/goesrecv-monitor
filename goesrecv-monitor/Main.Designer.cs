@@ -223,11 +223,13 @@
             this.constellationPanel.LineColor = System.Drawing.Color.DarkSlateGray;
             this.constellationPanel.Location = new System.Drawing.Point(0, 0);
             this.constellationPanel.Name = "constellationPanel";
+            this.constellationPanel.Order = 2;
             this.constellationPanel.Size = new System.Drawing.Size(350, 183);
             this.constellationPanel.SymbolColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
             this.constellationPanel.SymbolScale = 1.75F;
             this.constellationPanel.SymbolSize = 5;
             this.constellationPanel.TabIndex = 16;
+            this.constellationPanel.Click += new System.EventHandler(this.constellationPanel_Click);
             // 
             // labelVersion
             // 
