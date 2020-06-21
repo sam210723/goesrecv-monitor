@@ -77,12 +77,14 @@ namespace goesrecv_monitor
             }
 
             byte[] dres = new byte[65536];
+            int num;
             while (true)
             {
-                int numbytes = s.Receive(dres);
+                // Receive message content
+                num = s.Receive(dres);
 
                 // Kill thread if no data received
-                if (numbytes == 0)
+                if (num == 0)
                 {
                     Program.Log(logsrc, "Connection lost/no data, killing thread");
                     Stop();

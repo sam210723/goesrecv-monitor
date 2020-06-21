@@ -104,7 +104,6 @@ namespace goesrecv_monitor
                 // Receive nanomsg header
                 num = s.Receive(dres, 8, SocketFlags.None);
 
-
                 // Kill thread if no data received
                 if (num == 0)
                 {
@@ -171,7 +170,7 @@ namespace goesrecv_monitor
                 }
 
                 // Write parsed data to log
-                Program.Log(null, string.Format("FREQUENCY: {0}\n", freqStr));
+                Program.Log(logsrc, string.Format("FREQUENCY: {0}", freqStr));
 
                 // Update UI
                 Program.MainWindow.FrequencyOffset = freqStr;
@@ -290,7 +289,7 @@ namespace goesrecv_monitor
                 rs = (rs > 0) ? rs : 0;
 
                 // Write parsed data to log
-                Program.Log(null, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}\n", locked, sigQ, vit, rs));
+                Program.Log(logsrc, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
 
                 // Update UI
                 Program.MainWindow.SignalLock = locked;
