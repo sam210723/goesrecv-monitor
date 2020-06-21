@@ -82,11 +82,15 @@ namespace goesrecv_monitor
                 new Point(Center.X + 1, Height)
             );
 
+            // Skip QPSK line if order is not 4
+            if (Order != 4) { return; }
 
-            // Setup center line variables
-            LineStart = new Point(Center.X + 1, 0);
-            LineEnd = new Point(Center.X + 1, Height);
-            LinePen = new Pen(new SolidBrush(LineColor), 1);
+            // Draw QPSK line
+            g.DrawLine(
+                LinePen,
+                new Point(0, Center.X),
+                new Point(Width, Center.X)
+            );
         }
     }
 }
