@@ -118,6 +118,9 @@ namespace goesrecv_monitor
 
         // Properties
         public static string IP { get; set; }
+        
+        // 5001 = Quantisation output   (I only)
+        // 5002 = Clock Recovery output (I and Q)
         static readonly int SymbolPort = 5002;
 
         /// <summary>
