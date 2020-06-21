@@ -158,6 +158,34 @@ namespace goesrecv_monitor
         }
 
         /// <summary>
+        /// Resize UI elements based on constellation order
+        /// </summary>
+        /// <param name="order">Constellation order (2 = BPSK, 4 = QPSK)</param>
+        private void ChangeOrder(int order)
+        {
+            if (order == 2)
+            {
+                // Swap to BPSK
+                constellationPanel.Order = 2;
+                constellationPanel.Height = 184;
+                labelVersion.Location = new Point(2, 167);
+                labelSite.Location = new Point(286, 167);
+                this.Height = 222;
+                constellationPanel.Invalidate();
+            }
+            else
+            {
+                // Swap to QPSK
+                constellationPanel.Order = 4;
+                constellationPanel.Height = 350;
+                labelVersion.Location = new Point(2, 333);
+                labelSite.Location = new Point(286, 333);
+                this.Height = 389;
+            }
+
+            constellationPanel.Invalidate();
+        }
+        /// <summary>
         /// Triggers graceful exit
         /// </summary>
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
