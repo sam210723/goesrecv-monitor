@@ -191,6 +191,7 @@ namespace goesrecv_monitor
             // Save order
             Properties.Settings.Default.order = order;
             Properties.Settings.Default.Save();
+            Program.Log(logsrc, string.Format("Constellation order: {0} ({1})", order, (order == 2) ? "BPSK" : "QPSK"));
         }
 
         /// <summary>
