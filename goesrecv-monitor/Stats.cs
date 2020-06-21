@@ -94,10 +94,11 @@ namespace goesrecv_monitor
                 return;
             }
 
+            byte[] dres = new byte[256];
+
             // Continually receive data
             while (true)
             {
-                byte[] dres = new byte[5120];
                 int numbytes = s.Receive(dres);
 
                 // Kill thread if no data received
@@ -227,10 +228,11 @@ namespace goesrecv_monitor
                 return;
             }
 
+            byte[] dres = new byte[256];
+
             // Continually receive data
             while (true)
             {
-                byte[] dres = new byte[1024];
                 int numbytes = s.Receive(dres);
 
                 // Kill thread if no data received
