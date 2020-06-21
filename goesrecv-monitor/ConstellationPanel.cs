@@ -13,14 +13,13 @@ namespace goesrecv_monitor
         private Brush SymbolBrush;
         private Point Center;
         private Pen LinePen;
-        private Point LineStart;
-        private Point LineEnd;
 
         // Properties
         public Color SymbolColor { get; set; } = Color.FromArgb(128, Color.Yellow);
         public float SymbolScale { get; set; } = 1.75f;
         public int SymbolSize { get; set; } = 5;
         public Color LineColor { get; set; } = Color.DarkSlateGray;
+        public int Order { get; set; } = 2;
 
         /// <summary>
         /// Custom Panel control for drawing BPSK constellation plots
@@ -30,7 +29,9 @@ namespace goesrecv_monitor
             // Stop render flicker by double buffering
             DoubleBuffered = true;
 
+            // Setup brushes and pens
             SymbolBrush = new SolidBrush(SymbolColor);
+            LinePen = new Pen(new SolidBrush(LineColor), 1);
         }
 
         /// <summary>
@@ -42,8 +43,11 @@ namespace goesrecv_monitor
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Draw divider line
-            g.DrawLine(LinePen, LineStart, LineEnd);
+            // Get panel center
+            Center = new Point(Width / 2, Height / 2);
+
+            // Draw symbol dividing lines
+            DrawLines(g);
 
             // Skip symbols if none provided
             if (Symbols == null) { return; }
@@ -69,16 +73,15 @@ namespace goesrecv_monitor
             // Invalidate control, causing it to be re-drawn with OnPaint()
             Invalidate();
         }
+        
+        protected void DrawLines(Graphics g) {
+            // Draw BPSK line
+            g.DrawLine(
+                LinePen,
+                new Point(Center.X + 1, 0),
+                new Point(Center.X + 1, Height)
+            );
 
-        /// <summary>
-        /// Calculates panel center on Resize event
-        /// </summary>
-        protected override void OnResize(EventArgs eventargs)
-        {
-            base.OnResize(eventargs);
-
-            // Get panel center point
-            Center = new Point(Width / 2, Height / 2);
 
             // Setup center line variables
             LineStart = new Point(Center.X + 1, 0);
