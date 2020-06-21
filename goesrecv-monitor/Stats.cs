@@ -108,13 +108,6 @@ namespace goesrecv_monitor
                 if (num == 0)
                 {
                     Program.Log(logsrc, "Connection lost/no data, killing thread");
-                
-                    // Reset UI and alert user
-                    Program.MainWindow.ResetUI();
-                    System.Windows.Forms.MessageBox.Show("Lost connection to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                    // Stop all threads
-                    Stop();
                     return;
                 }
 
