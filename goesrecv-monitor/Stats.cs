@@ -273,45 +273,24 @@ namespace goesrecv_monitor
                 }
 
                 // Signal lock indicator
-                bool locked;
-                if (json[0]["ok"] != null)
-                {
-                    locked = (int)json[0]["ok"] != 0;
-                }
-                else
-                {
-                    locked = false;
-                }
+                bool locked = (json["ok"] != null) ? ((int)json["ok"] != 0) : false;
 
                 // Signal quality
-                int vit = (int)json[0]["viterbi_errors"];
+                int vit = (int)json["viterbi_errors"];
                 float vitLow = 30f;
                 float vitHigh = 1000f;
-                float sigQ;
-                sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
+                float sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
 
                 // Cap signal quality value
-                if (sigQ > 100)
-                {
-                    sigQ = 100;
-                }
-                else if (sigQ < 0)
-                {
-                    sigQ = 0;
-                }
+                sigQ = (sigQ > 100) ? 100 : sigQ;
+                sigQ = (sigQ < 0) ? 0 : sigQ;
 
-                // Count RS errors
-                int rs = 0;
-                foreach (JObject j in json)
-                {
-                    if ((int)j["reed_solomon_errors"] != -1)
-                    {
-                        rs += (int)j["reed_solomon_errors"];
-                    }
-                }
+                // Reed-Solomon errors
+                int rs = (int)json["reed_solomon_errors"];
+                rs = (rs > 0) ? rs : 0;
 
                 // Write parsed data to log
-                Program.Log(null, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
+                Program.Log(null, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}\n", locked, sigQ, vit, rs));
 
                 // Update UI
                 Program.MainWindow.SignalLock = locked;
