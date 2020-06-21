@@ -174,8 +174,6 @@ namespace goesrecv_monitor
 
                 // Update UI
                 Program.MainWindow.FrequencyOffset = freqStr;
-                
-                Thread.Sleep(500);
             }
         }
 
@@ -296,8 +294,6 @@ namespace goesrecv_monitor
                 Program.MainWindow.SignalQuality = (int)sigQ;
                 Program.MainWindow.ViterbiErrors = vit;
                 Program.MainWindow.RSErrors = rs;
-
-                Thread.Sleep(500);
             }
         }
 
