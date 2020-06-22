@@ -9,18 +9,17 @@ namespace goesrecv_monitor
     class ConstellationPanel : Panel
     {
         // Globals
-        private List<Point> Symbols;
+        private byte[] Symbols;
         private Brush SymbolBrush;
         private Point Center;
         private Pen LinePen;
-        private Point LineStart;
-        private Point LineEnd;
 
         // Properties
         public Color SymbolColor { get; set; } = Color.FromArgb(128, Color.Yellow);
         public float SymbolScale { get; set; } = 1.75f;
         public int SymbolSize { get; set; } = 5;
         public Color LineColor { get; set; } = Color.DarkSlateGray;
+        public int Order { get; set; } = 2;
 
         /// <summary>
         /// Custom Panel control for drawing BPSK constellation plots
@@ -30,7 +29,9 @@ namespace goesrecv_monitor
             // Stop render flicker by double buffering
             DoubleBuffered = true;
 
+            // Setup brushes and pens
             SymbolBrush = new SolidBrush(SymbolColor);
+            LinePen = new Pen(new SolidBrush(LineColor), 1);
         }
 
         /// <summary>
@@ -42,18 +43,27 @@ namespace goesrecv_monitor
             Graphics g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Draw divider line
-            g.DrawLine(LinePen, LineStart, LineEnd);
+            // Get panel center
+            Center = new Point(Width / 2, Height / 2);
+
+            // Draw symbol dividing lines
+            DrawLines(g);
 
             // Skip symbols if none provided
             if (Symbols == null) { return; }
 
-            foreach (Point sym in Symbols)
+            for (int i = 8; i < 2048; i = i + 2)
             {
-                // Draw point
-                float sX = Center.X + (sym.X * SymbolScale) - (SymbolSize / 2);
-                float sY = Center.Y + (sym.Y * SymbolScale) - (SymbolSize / 2);
-                g.FillEllipse(SymbolBrush, sX, sY, SymbolSize, SymbolSize);
+                sbyte symI = (sbyte) Symbols[i];
+                sbyte symQ = (sbyte) Symbols[i + 1];
+
+                // Ignore null values
+                if (symI != '\0' && symQ != '\0')
+                {
+                    float sX = Center.X + (symI * SymbolScale) - (SymbolSize / 2);
+                    float sY = Center.Y + (symQ * SymbolScale) - (SymbolSize / 2);
+                    g.FillEllipse(SymbolBrush, sX, sY, SymbolSize, SymbolSize);
+                }
             }
         }
 
@@ -61,7 +71,7 @@ namespace goesrecv_monitor
         /// Draws symbols on the constellation plot
         /// </summary>
         /// <param name="s">List of Point objects representing symbols</param>
-        public void DrawSymbols(List<Point> s)
+        public void DrawSymbols(byte[] s)
         {
             // Set global symbol list
             Symbols = s;
@@ -69,21 +79,27 @@ namespace goesrecv_monitor
             // Invalidate control, causing it to be re-drawn with OnPaint()
             Invalidate();
         }
-
+        
         /// <summary>
-        /// Calculates panel center on Resize event
+        /// Draw constellation lines
         /// </summary>
-        protected override void OnResize(EventArgs eventargs)
-        {
-            base.OnResize(eventargs);
+        protected void DrawLines(Graphics g) {
+            // Draw BPSK line
+            g.DrawLine(
+                LinePen,
+                new Point(Center.X + 1, 0),
+                new Point(Center.X + 1, Height)
+            );
 
-            // Get panel center point
-            Center = new Point(Width / 2, Height / 2);
+            // Skip QPSK line if order is not 4
+            if (Order != 4) { return; }
 
-            // Setup center line variables
-            LineStart = new Point(Center.X + 1, 0);
-            LineEnd = new Point(Center.X + 1, Height);
-            LinePen = new Pen(new SolidBrush(LineColor), 1);
+            // Draw QPSK line
+            g.DrawLine(
+                LinePen,
+                new Point(0, Center.X),
+                new Point(Width, Center.X)
+            );
         }
     }
 }

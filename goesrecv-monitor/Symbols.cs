@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace goesrecv_monitor
 {
@@ -81,35 +76,29 @@ namespace goesrecv_monitor
                 return;
             }
 
+            byte[] dres = new byte[65536];
+            int num;
             while (true)
             {
-                byte[] dres = new byte[65536];
-                int numbytes = s.Receive(dres);
+                // Receive message content
+                num = s.Receive(dres);
 
                 // Kill thread if no data received
-                if (numbytes == 0)
+                if (num == 0)
                 {
                     Program.Log(logsrc, "Connection lost/no data, killing thread");
+
+                    // Reset UI and alert user
+                    Program.MainWindow.ResetUI();
+                    System.Windows.Forms.MessageBox.Show("Lost connection to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+
+                    // Stop all threads
                     Stop();
                     return;
                 }
 
-                // Loop through bytes 2 at a time, skipping first 8
-                List<Point> points = new List<Point>();
-                for (int i = 8; i < 2048; i = i + 2)
-                {
-                    sbyte symI = (sbyte) dres[i];
-                    sbyte symQ = (sbyte) dres[i + 1];
-
-                    // Ignore null values
-                    if (symI != '\0' && symQ != '\0')
-                    {
-                        points.Add(new Point(symI, symQ));
-                    }
-                }
-
                 // Update UI
-                Program.MainWindow.DrawSymbols(points);
+                Program.MainWindow.DrawSymbols(dres);
 
                 Thread.Sleep(10);
             }
@@ -118,6 +107,9 @@ namespace goesrecv_monitor
 
         // Properties
         public static string IP { get; set; }
+        
+        // 5001 = Quantisation output   (I only)
+        // 5002 = Clock Recovery output (I and Q)
         static readonly int SymbolPort = 5002;
 
         /// <summary>

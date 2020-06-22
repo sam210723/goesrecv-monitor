@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace goesrecv_monitor
 {
@@ -97,75 +94,59 @@ namespace goesrecv_monitor
                 return;
             }
 
+            byte[] dres = new byte[256];
+            int num;
+            JObject json;
+
             // Continually receive data
             while (true)
             {
-                byte[] dres = new byte[5120];
-                int numbytes = s.Receive(dres);
+                // Receive nanomsg header
+                num = s.Receive(dres, 8, SocketFlags.None);
 
                 // Kill thread if no data received
-                if (numbytes == 0)
+                if (num == 0)
                 {
                     Program.Log(logsrc, "Connection lost/no data, killing thread");
-
-                    // Reset UI and alert user
-                    Program.MainWindow.ResetUI();
-                    System.Windows.Forms.MessageBox.Show("Lost connection to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-
-                    // Stop all threads
-                    Stop();
                     return;
                 }
 
-                string data = Encoding.ASCII.GetString(dres);   // Convert to ASCII;
-                string line;
-                try
+                // Get message length
+                int msglen = dres[7];
+
+                // Receive message content
+                num = s.Receive(dres, msglen, SocketFlags.None);
+
+                // Log message bytes
+                //Program.Log(logsrc, BitConverter.ToString(dres).Replace("-", ""));
+
+                // Kill thread if no data received
+                if (num == 0)
                 {
-                    // Tidy up raw data
-                    data = data.Replace("\0", "");              // Remove null bytes
-                    data = data.Replace("\n", "");              // Remove newlines
-                    data = data.Replace("{{", "{");             // Remove double braces
-                    data = data.Replace("|", "");               // Remove pipes (?)
-
-                    // JSON object substring
-                    line = data.Substring(data.IndexOf('{'), data.IndexOf('}') + 1);
-
-                    // Write cleaned line to log
-                    Program.Log(logsrc, string.Format("OK: {0}", line));
+                    Program.Log(logsrc, "Connection lost/no data, killing thread");
+                    return;
                 }
-                catch (Exception e)
-                {
-                    Program.Log(logsrc, "Error trimming raw data:");
 
-                    // Print exception line-by-line
-                    string[] elines = e.Message.Split('\r');
-                    foreach (string l in elines) {
-                        string ln = l.Replace("\r", "");
-                        ln = ln.Replace("\n", "");
+                // Convert message bytes to ASCII
+                string data = Encoding.ASCII.GetString(dres);
 
-                        Program.Log(logsrc, ln);
-                    }
-
-                    // Write bad line to log
-                    Program.Log(logsrc, string.Format("BAD: {0}", data));
-
-                    // Skip parsing
-                    continue;
-                }
+                // Trim message length and remove trailing new line
+                data = data.Substring(0, msglen);
+                data = data.TrimEnd('\n');
 
                 // Parse JSON objects
-                JObject json;
                 try
                 {
-                    json = JObject.Parse(line);
+                    json = JObject.Parse(data);
+                    Program.Log(logsrc, string.Format("OK: {0}", data));
                 }
                 catch (Newtonsoft.Json.JsonReaderException e)
                 {
-                    Program.Log(logsrc, string.Format("Error parsing JSON: {0}", e.ToString()));
-                    Program.Log(null, line);
+                    Program.Log(logsrc, string.Format("Error parsing JSON: {0}", data));
+                    Program.Log(logsrc, e.ToString());
                     continue;
                 }
-
+                
                 // kHz vs Hz
                 decimal freq = (decimal)json["frequency"];
                 string freqStr;
@@ -182,12 +163,10 @@ namespace goesrecv_monitor
                 }
 
                 // Write parsed data to log
-                Program.Log(null, string.Format("FREQUENCY: {0}", freqStr));
+                Program.Log(logsrc, string.Format("FREQUENCY: {0}", freqStr));
 
                 // Update UI
                 Program.MainWindow.FrequencyOffset = freqStr;
-                
-                Thread.Sleep(500);
             }
         }
 
@@ -230,126 +209,84 @@ namespace goesrecv_monitor
                 return;
             }
 
+            byte[] dres = new byte[256];
+            int num;
+            JObject json;
+
             // Continually receive data
             while (true)
             {
-                byte[] dres = new byte[1024];
-                int numbytes = s.Receive(dres);
+                // Receive nanomsg header
+                num = s.Receive(dres, 8, SocketFlags.None);
 
                 // Kill thread if no data received
-                if (numbytes == 0)
+                if (num == 0)
                 {
                     Program.Log(logsrc, "Connection lost/no data, killing thread");
                     return;
                 }
 
-                string data = Encoding.ASCII.GetString(dres);   // Convert to ASCII
-                try
-                {
-                    // Tidy up raw data
-                    data = data.Replace("\0", "");              // Remove null bytes
-                    data = data.Replace("{{", "{");             // Remove double braces
-                    data = data.Replace("|", "");               // Remove pipes (?)
-                    data = data.TrimEnd('\n');                  // Remove trailing newline
+                // Get message length
+                int msglen = dres[7];
 
-                    // Write cleaned line to log
-                    Program.Log(logsrc, string.Format("OK: {0}", data.Replace("\n", "")));
-                }
-                catch (Exception e)
+                // Receive message content
+                num = s.Receive(dres, msglen, SocketFlags.None);
+
+                // Log message bytes
+                //Program.Log(logsrc, BitConverter.ToString(dres).Replace("-", ""));
+
+                // Kill thread if no data received
+                if (num == 0)
                 {
-                    Program.Log(logsrc, string.Format("Error trimming raw data: {0}", e.Message.Replace("\r\n", ": ")));
-                    Program.Log(logsrc, Encoding.ASCII.GetString(dres));
-                    continue;
+                    Program.Log(logsrc, "Connection lost/no data, killing thread");
+                    return;
                 }
 
+                // Convert message bytes to ASCII
+                string data = Encoding.ASCII.GetString(dres);
 
-                // Parse JSON objects
-                List<JObject> json = new List<JObject>();
-                string[] lines = data.Split('\n');
-                string errLine = "";
+                // Trim message length and remove trailing new line
+                data = data.Substring(0, msglen);
+                data = data.TrimEnd('\n');
+                
+                // Parse JSON object
                 try
                 {
-                    // Loop through each JSON line
-                    foreach (string l in lines)
-                    {
-                        // Parse Line
-                        string line = l;
-                        if (line.IndexOf('{') != -1)
-                        {
-                            // Trim leading bytes before JSON string
-                            line = line.Substring(l.IndexOf('{'));
-                        }
-                        else
-                        {
-                            Program.Log(logsrc, "No JSON object found");
-                            continue;
-                        }
-
-                        // Handle double open brace
-                        if (line.StartsWith("{{\""))
-                        {
-                            line = line.Substring(1);
-                        }
-
-                        errLine = line;
-                        json.Add(JObject.Parse(line));
-                    }
+                    json = JObject.Parse(data);
+                    Program.Log(logsrc, string.Format("OK: {0}", data));
                 }
                 catch (Newtonsoft.Json.JsonReaderException e)
                 {
-                    Program.Log(logsrc, string.Format("Error parsing JSON: {0}", e.ToString()));
-                    Program.Log(null, errLine);
+                    Program.Log(logsrc, string.Format("Error parsing JSON: {0}", data));
+                    Program.Log(logsrc, e.ToString());
                     continue;
                 }
 
                 // Signal lock indicator
-                bool locked;
-                if (json[0]["ok"] != null)
-                {
-                    locked = (int)json[0]["ok"] != 0;
-                }
-                else
-                {
-                    locked = false;
-                }
+                bool locked = (json["ok"] != null) ? ((int)json["ok"] != 0) : false;
 
                 // Signal quality
-                int vit = (int)json[0]["viterbi_errors"];
+                int vit = (int)json["viterbi_errors"];
                 float vitLow = 30f;
                 float vitHigh = 1000f;
-                float sigQ;
-                sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
+                float sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
 
                 // Cap signal quality value
-                if (sigQ > 100)
-                {
-                    sigQ = 100;
-                }
-                else if (sigQ < 0)
-                {
-                    sigQ = 0;
-                }
+                sigQ = (sigQ > 100) ? 100 : sigQ;
+                sigQ = (sigQ < 0) ? 0 : sigQ;
 
-                // Count RS errors
-                int rs = 0;
-                foreach (JObject j in json)
-                {
-                    if ((int)j["reed_solomon_errors"] != -1)
-                    {
-                        rs += (int)j["reed_solomon_errors"];
-                    }
-                }
+                // Reed-Solomon errors
+                int rs = (int)json["reed_solomon_errors"];
+                rs = (rs > 0) ? rs : 0;
 
                 // Write parsed data to log
-                Program.Log(null, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
+                Program.Log(logsrc, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
 
                 // Update UI
                 Program.MainWindow.SignalLock = locked;
                 Program.MainWindow.SignalQuality = (int)sigQ;
                 Program.MainWindow.ViterbiErrors = vit;
                 Program.MainWindow.RSErrors = rs;
-
-                Thread.Sleep(500);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Net;
@@ -32,6 +31,9 @@ namespace goesrecv_monitor
                 Program.Log(logsrc, "IP: 192.168.");
             }
 
+            // Set constellation order and update UI
+            ChangeOrder(Properties.Settings.Default.order);
+
             // Set control colours
             btnConnct.BackColor = Color.FromArgb(255, 30, 30, 30);
             textIP.BackColor = Color.FromArgb(255, 30, 30, 30);
@@ -46,17 +48,17 @@ namespace goesrecv_monitor
         /// Draws symbols on constellation plot
         /// </summary>
         /// <param name="points">List of Point objects representing symbols</param>
-        public void DrawSymbols(List<Point> points)
+        public void DrawSymbols(byte[] s)
         {
             if (constellationPanel.InvokeRequired)
             {
                 constellationPanel.Invoke((MethodInvoker)(() => {
-                    constellationPanel.DrawSymbols(points);
+                    constellationPanel.DrawSymbols(s);
                 }));
             }
             else
             {
-                constellationPanel.DrawSymbols(points);
+                constellationPanel.DrawSymbols(s);
             }
         }
 
@@ -154,6 +156,55 @@ namespace goesrecv_monitor
                 progressSignalQ.Value = 0;
                 labelVitErr.Text = "-";
                 labelRsErr.Text = "-";
+            }
+        }
+
+        /// <summary>
+        /// Resize UI elements based on constellation order
+        /// </summary>
+        /// <param name="order">Constellation order (2 = BPSK, 4 = QPSK)</param>
+        private void ChangeOrder(int order)
+        {
+            if (order == 2)
+            {
+                // Swap to BPSK
+                constellationPanel.Order = 2;
+                constellationPanel.Height = 184;
+                labelVersion.Location = new Point(2, 167);
+                labelSite.Location = new Point(286, 167);
+                this.Height = 222;
+                constellationPanel.Invalidate();
+            }
+            else
+            {
+                // Swap to QPSK
+                constellationPanel.Order = 4;
+                constellationPanel.Height = 350;
+                labelVersion.Location = new Point(2, 333);
+                labelSite.Location = new Point(286, 333);
+                this.Height = 389;
+            }
+
+            constellationPanel.Invalidate();
+
+            // Save order
+            Properties.Settings.Default.order = order;
+            Properties.Settings.Default.Save();
+            Program.Log(logsrc, string.Format("Constellation order: {0} ({1})", order, (order == 2) ? "BPSK" : "QPSK"));
+        }
+
+        /// <summary>
+        /// Swap between BPSK and QPSK mode on Constellation Panel click
+        /// </summary>
+        private void constellationPanel_Click(object sender, EventArgs e)
+        {
+            if (constellationPanel.Order == 4)
+            {
+                ChangeOrder(2);
+            }
+            else
+            {
+                ChangeOrder(4);
             }
         }
 
