@@ -6,7 +6,7 @@
 
 goesrecv monitor is a software utility for monitoring the status of [goesrecv](https://github.com/pietern/goestools) by [Pieter Noordhuis](https://twitter.com/pnoordhuis). goesrecv is a BPSK demodulator and CCSDS decoder for LRIT and HRIT downlinks transmitted by geostationary weather satellites like GOES-16/17 and GK-2A.
 
-<p align="center"><img src="main-window.png"></p>
+<p align="center"><img src="screenshots/main-window.png"></p>
 
 ## Getting Started
 Microsoft [.NET Framework Runtime v4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48) ([direct download](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)) is required to run **goesrecv monitor**. Once .NET is installed, download the [latest release](https://github.com/sam210723/goesrecv-monitor/releases/latest/download/goesrecv-monitor.zip) of **goesrecv monitor** and extract all files inside the ZIP to a new folder.
@@ -31,7 +31,7 @@ If **goesrecv monitor** fails to connect, check for firewalls on the device runn
 ## Large Statistics
 The large statistics window is intended to improve visibility of the Viterbi error count and Signal Quality percentage from a distance. This is useful while while fine tuning the alignment of an antenna. Launch the Large Statistics window by clicking on the "Large" button in the main window.
 
-<p align="center"><img src="large-stats.png"></p>
+<p align="center"><img src="screenshots/large-stats.png"></p>
 
 ## Debug Logs
 **goesrecv monitor** can log certain information to a text file for the purposes of debugging crashes or configuration issues. Changing the ```logging``` setting in ```goesrecv-monitor.exe.config``` to either ```True``` or ```False``` will enable or disable the log file.
