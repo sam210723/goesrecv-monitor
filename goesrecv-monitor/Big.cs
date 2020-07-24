@@ -15,8 +15,6 @@ namespace goesrecv_monitor
         public Big()
         {
             InitializeComponent();
-
-            this.DoubleBuffered = true;
         }
 
         /// <summary>
@@ -24,21 +22,21 @@ namespace goesrecv_monitor
         /// </summary>
         public void ResetUI()
         {
-            if (labelQuality.InvokeRequired)
+            if (labelRsErr.InvokeRequired)
             {
-                labelQuality.Invoke((MethodInvoker)(() => {
+                labelRsErr.Invoke((MethodInvoker)(() => {
                     this.BackColor = Color.Black;
-                    labelQuality.Text = "----";
-                    labelVitErr.Text = "----";
                     labelRsErr.Text = "----";
+                    labelVitErr.Text = "----";
+                    labelQuality.Text = "----";
                 }));
             }
             else
             {
                 this.BackColor = Color.Black;
-                labelQuality.Text = "----";
-                labelVitErr.Text = "----";
                 labelRsErr.Text = "----";
+                labelVitErr.Text = "----";
+                labelQuality.Text = "----";
             }
         }
 
