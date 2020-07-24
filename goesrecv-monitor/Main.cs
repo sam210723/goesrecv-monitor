@@ -76,6 +76,7 @@ namespace goesrecv_monitor
                 Symbols.Stop();
 
                 ResetUI();
+                if (Program.BigWindow.Visible) { Program.BigWindow.ResetUI(); }
             }
             else
             {
