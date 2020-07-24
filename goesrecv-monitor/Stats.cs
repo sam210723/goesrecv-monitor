@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -98,6 +99,10 @@ namespace goesrecv_monitor
             int num;
             JObject json;
 
+            // Averaging
+            long timeAvg = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            List<decimal> freqAvg = new List<decimal>();
+
             // Continually receive data
             while (true)
             {
@@ -148,25 +153,40 @@ namespace goesrecv_monitor
                 }
                 
                 // kHz vs Hz
-                decimal freq = (decimal)json["frequency"];
-                string freqStr;
-                if (freq > 999 || freq < -999)
-                {
-                    freq = freq / 1000;
-                    freq = Math.Round(freq, 2);
-                    freqStr = freq.ToString() + " kHz";
-                }
-                else
-                {
-                    freq = Math.Round(freq);
-                    freqStr = freq + " Hz";
-                }
+                decimal freq = Math.Round((decimal)json["frequency"], 2);
 
                 // Write parsed data to log
-                Program.Log(logsrc, string.Format("FREQUENCY: {0}", freqStr));
+                Program.Log(logsrc, string.Format("FREQUENCY: {0}", freq));
 
-                // Update main UI
-                Program.MainWindow.FrequencyOffset = freqStr;
+                // Add values to average lists
+                freqAvg.Add(freq);
+
+                // Calculate average every second
+                if (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeAvg > 1000)
+                {
+                    decimal avg = freqAvg.Average();
+                    string avgStr;
+
+                    if (avg > 999 || avg < -999)
+                    {
+                        avg = avg / 1000;
+                        avg = Math.Round(avg, 2);
+                        avgStr = avg.ToString() + " kHz";
+                    }
+                    else
+                    {
+                        avg = Math.Round(avg);
+                        avgStr = avg + " Hz";
+                    }
+
+                    Program.Log(logsrc, string.Format("AVERAGE FREQUENCY: {0}", avgStr));
+
+                    // Update main UI
+                    Program.MainWindow.FrequencyOffset = avgStr;
+
+                    freqAvg.Clear();
+                    timeAvg = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                }
             }
         }
 
@@ -212,6 +232,11 @@ namespace goesrecv_monitor
             byte[] dres = new byte[256];
             int num;
             JObject json;
+
+            // Averaging
+            long timeAvg = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            List<int> vitAvg = new List<int>();
+            List<int> rsAvg = new List<int>();
 
             // Continually receive data
             while (true)
@@ -265,36 +290,53 @@ namespace goesrecv_monitor
                 // Signal lock indicator
                 bool locked = (json["ok"] != null) ? ((int)json["ok"] != 0) : false;
 
-                // Signal quality
+                // Viterbi errors
                 int vit = (int)json["viterbi_errors"];
-                float vitLow = 30f;
-                float vitHigh = 1000f;
-                float sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
-
-                // Cap signal quality value
-                sigQ = (sigQ > 100) ? 100 : sigQ;
-                sigQ = (sigQ < 0) ? 0 : sigQ;
 
                 // Reed-Solomon errors
                 int rs = (int)json["reed_solomon_errors"];
                 rs = (rs > 0) ? rs : 0;
 
                 // Write parsed data to log
-                Program.Log(logsrc, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
+                Program.Log(logsrc, string.Format("LOCK: {0}    VITERBI: {1}    RS: {2}", locked, vit, rs));
 
-                // Update main UI
-                Program.MainWindow.SignalLock = locked;
-                Program.MainWindow.SignalQuality = (int)sigQ;
-                Program.MainWindow.ViterbiErrors = vit;
-                Program.MainWindow.RSErrors = rs;
-                
-                // Update large stats UI
-                if (Program.BigWindow.Visible)
+                // Add values to average lists
+                vitAvg.Add(vit);
+                rsAvg.Add(rs);
+
+                // Calculate average every second
+                if (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeAvg > 1000)
                 {
-                    Program.BigWindow.SignalLock = locked;
-                    Program.BigWindow.SignalQuality = (int)sigQ;
-                    Program.BigWindow.ViterbiErrors = vit;
-                    Program.BigWindow.RSErrors = rs;
+                    // Signal quality
+                    float vitLow = 30f;
+                    float vitHigh = 1000f;
+                    float sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
+
+                    // Cap signal quality value
+                    sigQ = (sigQ > 100) ? 100 : sigQ;
+                    sigQ = (sigQ < 0) ? 0 : sigQ;
+
+                    Program.Log(logsrc, string.Format("AVERAGE QUALITY: {0}%    AVERAGE VITERBI: {1}    AVERAGE RS: {2}", sigQ, (int)vitAvg.Average(), (int)rsAvg.Average()));
+
+                    // Update main UI
+                    Program.MainWindow.SignalLock = locked;
+                    Program.MainWindow.SignalQuality = (int)sigQ;
+                    Program.MainWindow.ViterbiErrors = (int)vitAvg.Average();
+                    Program.MainWindow.RSErrors = (int)rsAvg.Average();
+
+                    // Update large stats UI
+                    if (Program.BigWindow.Visible)
+                    {
+                        Program.BigWindow.SignalLock = locked;
+                        Program.BigWindow.SignalQuality = (int)sigQ;
+                        Program.BigWindow.ViterbiErrors = (int)vitAvg.Average();
+                        Program.BigWindow.RSErrors = (int)rsAvg.Average();
+                    }
+
+                    // Reset average time
+                    vitAvg.Clear();
+                    rsAvg.Clear();
+                    timeAvg = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 }
             }
         }
