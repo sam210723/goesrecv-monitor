@@ -90,6 +90,7 @@ namespace goesrecv_monitor
 
                     // Reset UI and alert user
                     Program.MainWindow.ResetUI();
+                    if (Program.BigWindow.Visible) { Program.BigWindow.ResetUI(); }
                     System.Windows.Forms.MessageBox.Show("Lost connection to goesrecv", "Error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
 
                     // Stop all threads

@@ -165,7 +165,7 @@ namespace goesrecv_monitor
                 // Write parsed data to log
                 Program.Log(logsrc, string.Format("FREQUENCY: {0}", freqStr));
 
-                // Update UI
+                // Update main UI
                 Program.MainWindow.FrequencyOffset = freqStr;
             }
         }
@@ -282,11 +282,20 @@ namespace goesrecv_monitor
                 // Write parsed data to log
                 Program.Log(logsrc, string.Format("LOCK: {0}    QUALITY: {1}%    VITERBI: {2}    RS: {3}", locked, sigQ, vit, rs));
 
-                // Update UI
+                // Update main UI
                 Program.MainWindow.SignalLock = locked;
                 Program.MainWindow.SignalQuality = (int)sigQ;
                 Program.MainWindow.ViterbiErrors = vit;
                 Program.MainWindow.RSErrors = rs;
+                
+                // Update large stats UI
+                if (Program.BigWindow.Visible)
+                {
+                    Program.BigWindow.SignalLock = locked;
+                    Program.BigWindow.SignalQuality = (int)sigQ;
+                    Program.BigWindow.ViterbiErrors = vit;
+                    Program.BigWindow.RSErrors = rs;
+                }
             }
         }
 

@@ -8,6 +8,7 @@ namespace goesrecv_monitor
     static class Program
     {
         public static Main MainWindow;
+        public static Big BigWindow;
 
         public static StreamWriter logf;
         public static bool logging;
@@ -27,6 +28,9 @@ namespace goesrecv_monitor
 
             Log(logsrc, "Creating instance of Main()");
             MainWindow = new Main();
+
+            Log(logsrc, "Creating instance of Big()");
+            BigWindow = new Big();
 
             Log(logsrc, "Running Main()");
             Application.Run(MainWindow);
