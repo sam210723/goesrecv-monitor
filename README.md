@@ -29,7 +29,7 @@ Finally, open **goesrecv monitor** and enter the IP address of a device running 
 If **goesrecv monitor** fails to connect, check for firewalls on the device running goesrecv. Inbound connections on ports ```5002```, ```6001``` and ```6002``` must be allowed.
 
 ## Large Statistics
-The large statistics window is intended to improve visibility of the Viterbi error count and Signal Quality percentage from a distance. This is useful while while fine tuning the alignment of an antenna. Launch the Large Statistics window by clicking on the "Large" button in the main window.
+The large statistics window is intended to improve visibility of the Viterbi error count and Signal Quality percentage from a distance. This is useful while while fine tuning the alignment of an antenna. Launch the Large Statistics window by clicking on the "Open Large View" button in the main window.
 
 The window background colour changes between red and green to indicate the Signal Lock state.
 
