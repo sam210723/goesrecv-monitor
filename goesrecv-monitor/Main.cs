@@ -233,7 +233,7 @@ namespace goesrecv_monitor
         }
 
 
-        // Properties
+        #region Properties
         public bool SignalLock
         {
             set
@@ -372,5 +372,6 @@ namespace goesrecv_monitor
 
             }
         }
+        #endregion
     }
 }
