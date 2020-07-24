@@ -31,6 +31,8 @@ If **goesrecv monitor** fails to connect, check for firewalls on the device runn
 ## Large Statistics
 The large statistics window is intended to improve visibility of the Viterbi error count and Signal Quality percentage from a distance. This is useful while while fine tuning the alignment of an antenna. Launch the Large Statistics window by clicking on the "Large" button in the main window.
 
+The window background colour changes between red and green to indicate the Signal Lock state.
+
 <p align="center"><img src="screenshots/large-stats.png"></p>
 
 ## Debug Logs
