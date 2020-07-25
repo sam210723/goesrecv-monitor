@@ -28,10 +28,17 @@ Finally, open **goesrecv monitor** and enter the IP address of a device running 
 
 If **goesrecv monitor** fails to connect, check for firewalls on the device running goesrecv. Inbound connections on ports ```5002```, ```6001``` and ```6002``` must be allowed.
 
-## Large Statistics
-The large statistics window is intended to improve visibility of the Viterbi error count and Signal Quality percentage from a distance. This is useful while while fine tuning the alignment of an antenna. Launch the Large Statistics window by clicking on the "Open Large View" button in the main window.
+## Statistics Plot
+**goesrecv monitor** can plot the Viterbi and Reed-Solomon error counts in real-time using the Statistics Plot window. The plot has selectable time ranges from ``1 minute`` up to ``24 hours``. Plot data can be exported to a ``CSV`` file using the "Export CSV" button on the lower right of the window.
 
-The window background colour changes between red and green to indicate the Signal Lock state.
+Launch the Statistics Plot by clicking on the "Open Statistics Plot" button in the main window.
+
+<p align="center"><img src="screenshots/stats-plot.png"></p>
+
+## Large Statistics
+The large statistics window is intended to improve visibility of the Viterbi error count and Signal Quality percentage from a distance. This is useful while while fine tuning the alignment of an antenna. The window background colour changes between red and green to indicate the Signal Lock state.
+
+Launch the Large Statistics window by clicking on the "Open Large View" button in the main window.
 
 <p align="center"><img src="screenshots/large-stats.png"></p>
 
