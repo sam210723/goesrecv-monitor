@@ -40,6 +40,23 @@ namespace goesrecv_monitor
             }
         }
 
+        /// <summary>
+        /// Toggle font colour
+        /// </summary>
+        private void btnFontColour_Click(object sender, EventArgs e)
+        {
+            if (ForeColor == Color.White)
+            {
+                ForeColor = Color.Black;
+                btnFontColour.BackColor = Color.White;
+            }
+            else
+            {
+                ForeColor = Color.White;
+                btnFontColour.BackColor = Color.FromArgb(1, 1, 1);
+            }
+        }
+
 
         #region Properties
         public bool SignalLock
