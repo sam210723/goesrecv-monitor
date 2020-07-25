@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Big));
             this.labelVitErr = new System.Windows.Forms.Label();
             this.labelQuality = new System.Windows.Forms.Label();
@@ -36,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.btnFontColour = new System.Windows.Forms.Button();
+            this.toolTipFontColourToggle = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // labelVitErr
@@ -112,6 +114,7 @@
             this.btnFontColour.Size = new System.Drawing.Size(38, 36);
             this.btnFontColour.TabIndex = 0;
             this.btnFontColour.Text = " ";
+            this.toolTipFontColourToggle.SetToolTip(this.btnFontColour, "Toggle text colour between black and white");
             this.btnFontColour.UseVisualStyleBackColor = false;
             this.btnFontColour.Click += new System.EventHandler(this.btnFontColour_Click);
             // 
@@ -150,5 +153,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnFontColour;
+        private System.Windows.Forms.ToolTip toolTipFontColourToggle;
     }
 }
