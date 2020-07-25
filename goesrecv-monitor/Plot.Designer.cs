@@ -174,6 +174,7 @@
             // 
             // btnExportCSV
             // 
+            this.btnExportCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportCSV.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.btnExportCSV.ForeColor = System.Drawing.Color.White;
             this.btnExportCSV.Location = new System.Drawing.Point(1095, 376);
