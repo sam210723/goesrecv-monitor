@@ -122,7 +122,7 @@ namespace goesrecv_monitor
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 File.WriteAllText(sfd.FileName, csv.ToString());
-                MessageBox.Show(string.Format("Plot data saved to \"{0}\"", sfd.FileName), "Export Plot Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show(string.Format("Plot data saved to \"{0}\"", sfd.FileName), "Export Plot Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
