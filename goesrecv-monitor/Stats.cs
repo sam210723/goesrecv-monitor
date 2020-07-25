@@ -233,6 +233,11 @@ namespace goesrecv_monitor
             int num;
             JObject json;
 
+            // Signal quality
+            float sigQ = 0f;
+            float vitLow = 30f;
+            float vitHigh = 1000f;
+
             // Averaging
             long timeAvg = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             List<int> vitAvg = new List<int>();
@@ -304,18 +309,20 @@ namespace goesrecv_monitor
                 vitAvg.Add(vit);
                 rsAvg.Add(rs);
 
+                // Calculate signal quality (capped at 100)
+                sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
+                sigQ = (sigQ > 100) ? 100 : sigQ;
+                sigQ = (sigQ < 0) ? 0 : sigQ;
+
+                // Update stats plot UI
+                if (Program.PlotWindow.Visible && Program.PlotWindow.ReadyForData)
+                {
+                    Program.PlotWindow.Update(vit, (int)rsAvg.Average());
+                }
+
                 // Calculate average every second
                 if (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeAvg > 1000)
                 {
-                    // Signal quality
-                    float vitLow = 30f;
-                    float vitHigh = 1000f;
-                    float sigQ = 100 - (((vit - vitLow) / (vitHigh - vitLow)) * 100);
-
-                    // Cap signal quality value
-                    sigQ = (sigQ > 100) ? 100 : sigQ;
-                    sigQ = (sigQ < 0) ? 0 : sigQ;
-
                     Program.Log(logsrc, string.Format("AVERAGE QUALITY: {0}%    AVERAGE VITERBI: {1}    AVERAGE RS: {2}", sigQ, (int)vitAvg.Average(), (int)rsAvg.Average()));
 
                     // Update main UI
