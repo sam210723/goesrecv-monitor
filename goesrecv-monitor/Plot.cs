@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace goesrecv_monitor
 {
@@ -84,7 +86,50 @@ namespace goesrecv_monitor
             // Clear new data force flag
             force = false;
         }
-        
+
+        /// <summary>
+        /// Exports current plot data to CSV file
+        /// </summary>
+        private void btnExportCSV_Click(object sender, EventArgs e)
+        {
+            // Get chart data points
+            List<DataPoint> vit = chartStats.Series[0].Points.ToList<DataPoint>();
+            List<DataPoint> rs  = chartStats.Series[1].Points.ToList<DataPoint>();
+
+            // CSV string and header
+            StringBuilder csv = new StringBuilder();
+            csv.AppendLine("Timestamp,Viterbi,Reed-Solomon");
+
+            // Loop through points
+            for (int i = 0; i < vit.Count; i++)
+            {
+                // Get timestamp for row
+                string timestamp = DateTime.FromOADate(vit[i].XValue).ToString("dd/MM/yy HH:mm:ss.fff");
+
+                // Add timestamp and values to row
+                csv.AppendFormat("{0},{1},{2}\n", timestamp, vit[i].YValues[0], rs[i].YValues[0]);
+            }
+
+            // Configure save dialog
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Title = "Save CSV...";
+            sfd.FileName = "data.csv";
+            sfd.Filter = "CSV Files | *.csv";
+            sfd.DefaultExt = "csv";
+            sfd.InitialDirectory = Environment.CurrentDirectory;
+
+            // Save file
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                File.WriteAllText(sfd.FileName, csv.ToString());
+                MessageBox.Show(string.Format("Plot data saved to \"{0}\"", sfd.FileName), "Export Plot Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                return;
+            }
+        }
+
         /// <summary>
         /// Clear chart when period changes
         /// </summary>

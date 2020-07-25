@@ -36,7 +36,7 @@
             this.chartStats = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.comboPeriod = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnExportCSV = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chartStats)).BeginInit();
             this.SuspendLayout();
             // 
@@ -135,7 +135,7 @@
             this.chartStats.Series.Add(series1);
             this.chartStats.Series.Add(series2);
             this.chartStats.Size = new System.Drawing.Size(1222, 396);
-            this.chartStats.TabIndex = 0;
+            this.chartStats.TabIndex = 2;
             this.chartStats.TabStop = false;
             this.chartStats.Text = "Statistics Plot";
             // 
@@ -172,16 +172,17 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Duration";
             // 
-            // button1
+            // btnExportCSV
             // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(1095, 376);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(80, 31);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Export CSV";
-            this.button1.UseVisualStyleBackColor = false;
+            this.btnExportCSV.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnExportCSV.ForeColor = System.Drawing.Color.White;
+            this.btnExportCSV.Location = new System.Drawing.Point(1095, 376);
+            this.btnExportCSV.Name = "btnExportCSV";
+            this.btnExportCSV.Size = new System.Drawing.Size(80, 31);
+            this.btnExportCSV.TabIndex = 1;
+            this.btnExportCSV.Text = "Export CSV";
+            this.btnExportCSV.UseVisualStyleBackColor = false;
+            this.btnExportCSV.Click += new System.EventHandler(this.btnExportCSV_Click);
             // 
             // Plot
             // 
@@ -189,7 +190,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1182, 414);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnExportCSV);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboPeriod);
             this.Controls.Add(this.chartStats);
@@ -210,6 +211,6 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart chartStats;
         private System.Windows.Forms.ComboBox comboPeriod;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnExportCSV;
     }
 }
