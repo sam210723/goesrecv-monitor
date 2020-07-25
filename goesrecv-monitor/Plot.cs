@@ -23,8 +23,8 @@ namespace goesrecv_monitor
         {
             InitializeComponent();
 
-            // Default to 1 minute period
-            Period = 0;
+            // Get default period from settings
+            Period = Properties.Settings.Default.period;
         }
 
         /// <summary>
@@ -140,6 +140,10 @@ namespace goesrecv_monitor
 
             // Set new data force flag
             force = true;
+
+            // Save period setting
+            Properties.Settings.Default.period = Period;
+            Properties.Settings.Default.Save();
         }
 
         #region Properties

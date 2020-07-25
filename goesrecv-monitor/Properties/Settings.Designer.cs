@@ -55,5 +55,17 @@ namespace goesrecv_monitor.Properties {
                 this["order"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int period {
+            get {
+                return ((int)(this["period"]));
+            }
+            set {
+                this["period"] = value;
+            }
+        }
     }
 }
