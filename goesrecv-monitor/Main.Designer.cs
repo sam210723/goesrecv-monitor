@@ -202,7 +202,7 @@
             this.textIP.Multiline = true;
             this.textIP.Name = "textIP";
             this.textIP.Size = new System.Drawing.Size(90, 20);
-            this.textIP.TabIndex = 2;
+            this.textIP.TabIndex = 0;
             this.textIP.Text = "192.168.1.";
             this.textIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textIP_KeyPress);
             // 
@@ -214,7 +214,7 @@
             this.btnConnct.Location = new System.Drawing.Point(573, 143);
             this.btnConnct.Name = "btnConnct";
             this.btnConnct.Size = new System.Drawing.Size(92, 27);
-            this.btnConnct.TabIndex = 3;
+            this.btnConnct.TabIndex = 1;
             this.btnConnct.Text = "Connect";
             this.btnConnct.UseVisualStyleBackColor = false;
             this.btnConnct.Click += new System.EventHandler(this.btnConnct_Click);
@@ -228,7 +228,7 @@
             this.btnLargeStats.Location = new System.Drawing.Point(519, 186);
             this.btnLargeStats.Name = "btnLargeStats";
             this.btnLargeStats.Size = new System.Drawing.Size(145, 27);
-            this.btnLargeStats.TabIndex = 17;
+            this.btnLargeStats.TabIndex = 2;
             this.btnLargeStats.Text = "Open Large View";
             this.btnLargeStats.UseVisualStyleBackColor = false;
             this.btnLargeStats.Click += new System.EventHandler(this.btnLargeStats_Click);
@@ -242,7 +242,7 @@
             this.btnPlot.Location = new System.Drawing.Point(364, 186);
             this.btnPlot.Name = "btnPlot";
             this.btnPlot.Size = new System.Drawing.Size(145, 27);
-            this.btnPlot.TabIndex = 18;
+            this.btnPlot.TabIndex = 3;
             this.btnPlot.Text = "Open Statistics Plot";
             this.btnPlot.UseVisualStyleBackColor = false;
             this.btnPlot.Click += new System.EventHandler(this.btnPlot_Click);
@@ -276,7 +276,7 @@
             this.labelVersion.Location = new System.Drawing.Point(2, 209);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(25, 13);
-            this.labelVersion.TabIndex = 18;
+            this.labelVersion.TabIndex = 5;
             this.labelVersion.TabStop = true;
             this.labelVersion.Text = "VER";
             this.labelVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelVersion_LinkClicked);
@@ -292,7 +292,7 @@
             this.labelSite.Location = new System.Drawing.Point(286, 209);
             this.labelSite.Name = "labelSite";
             this.labelSite.Size = new System.Drawing.Size(61, 13);
-            this.labelSite.TabIndex = 17;
+            this.labelSite.TabIndex = 4;
             this.labelSite.TabStop = true;
             this.labelSite.Text = "vksdr.com";
             this.labelSite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelSite_LinkClicked);
