@@ -114,7 +114,7 @@
             this.btnFontColour.Size = new System.Drawing.Size(38, 36);
             this.btnFontColour.TabIndex = 0;
             this.btnFontColour.Text = " ";
-            this.toolTipFontColourToggle.SetToolTip(this.btnFontColour, "Toggle text colour between black and white");
+            this.toolTipFontColourToggle.SetToolTip(this.btnFontColour, "Toggle text colour");
             this.btnFontColour.UseVisualStyleBackColor = false;
             this.btnFontColour.Click += new System.EventHandler(this.btnFontColour_Click);
             // 
