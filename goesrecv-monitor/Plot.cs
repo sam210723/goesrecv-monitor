@@ -18,6 +18,7 @@ namespace goesrecv_monitor
         bool ready = false;
         bool force = false;
         int[] durations = { 60, 120, 600, 1800, 3600, 21600, 43200, 86400 };
+        int periodIdx;
 
         public Plot()
         {
@@ -133,8 +134,9 @@ namespace goesrecv_monitor
         /// <summary>
         /// Clear chart when period changes
         /// </summary>
-        private void comboPeriod_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboPeriod_SelectionChangeCommitted(object sender, EventArgs e)
         {
+            periodIdx = comboPeriod.SelectedIndex;
             chartStats.Series[0].Points.Clear();
             chartStats.Series[1].Points.Clear();
 
@@ -145,6 +147,7 @@ namespace goesrecv_monitor
             Properties.Settings.Default.period = Period;
             Properties.Settings.Default.Save();
         }
+
 
         #region Properties
         /// <summary>
@@ -157,8 +160,11 @@ namespace goesrecv_monitor
         /// </summary>
         public int Period
         {
-            get { return comboPeriod.SelectedIndex; }
-            set { comboPeriod.SelectedIndex = value; }
+            get { return periodIdx; }
+            set {
+                comboPeriod.SelectedIndex = value;
+                periodIdx = value;
+            }
         }
 
         /// <summary>

@@ -157,7 +157,7 @@
             this.comboPeriod.Name = "comboPeriod";
             this.comboPeriod.Size = new System.Drawing.Size(83, 21);
             this.comboPeriod.TabIndex = 0;
-            this.comboPeriod.SelectedIndexChanged += new System.EventHandler(this.comboPeriod_SelectedIndexChanged);
+            this.comboPeriod.SelectionChangeCommitted += new System.EventHandler(this.comboPeriod_SelectionChangeCommitted);
             // 
             // label1
             // 
