@@ -37,6 +37,7 @@
             this.comboPeriod = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnExportCSV = new System.Windows.Forms.Button();
+            this.btnClearPlot = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chartStats)).BeginInit();
             this.SuspendLayout();
             // 
@@ -185,12 +186,26 @@
             this.btnExportCSV.UseVisualStyleBackColor = false;
             this.btnExportCSV.Click += new System.EventHandler(this.btnExportCSV_Click);
             // 
+            // btnClearPlot
+            // 
+            this.btnClearPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClearPlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnClearPlot.ForeColor = System.Drawing.Color.White;
+            this.btnClearPlot.Location = new System.Drawing.Point(1009, 376);
+            this.btnClearPlot.Name = "btnClearPlot";
+            this.btnClearPlot.Size = new System.Drawing.Size(80, 31);
+            this.btnClearPlot.TabIndex = 5;
+            this.btnClearPlot.Text = "Clear Plot";
+            this.btnClearPlot.UseVisualStyleBackColor = false;
+            this.btnClearPlot.Click += new System.EventHandler(this.btnClearPlot_Click);
+            // 
             // Plot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1182, 414);
+            this.Controls.Add(this.btnClearPlot);
             this.Controls.Add(this.btnExportCSV);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboPeriod);
@@ -213,5 +228,6 @@
         private System.Windows.Forms.ComboBox comboPeriod;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnExportCSV;
+        private System.Windows.Forms.Button btnClearPlot;
     }
 }

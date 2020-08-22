@@ -132,13 +132,11 @@ namespace goesrecv_monitor
         }
 
         /// <summary>
-        /// Clear chart when period changes
+        /// Update period of chart X axis
         /// </summary>
         private void comboPeriod_SelectionChangeCommitted(object sender, EventArgs e)
         {
             periodIdx = comboPeriod.SelectedIndex;
-            chartStats.Series[0].Points.Clear();
-            chartStats.Series[1].Points.Clear();
 
             // Set new data force flag
             force = true;
@@ -146,6 +144,15 @@ namespace goesrecv_monitor
             // Save period setting
             Properties.Settings.Default.period = Period;
             Properties.Settings.Default.Save();
+        }
+
+        /// <summary>
+        /// Clear data from plot
+        /// </summary>
+        private void btnClearPlot_Click(object sender, EventArgs e)
+        {
+            chartStats.Series[0].Points.Clear();
+            chartStats.Series[1].Points.Clear();
         }
 
 
