@@ -34,13 +34,6 @@ namespace goesrecv_monitor
             // Set constellation order and update UI
             ChangeOrder(Properties.Settings.Default.order);
 
-            // Set control colours
-            btnConnct.BackColor = Color.FromArgb(255, 30, 30, 30);
-            textIP.BackColor = Color.FromArgb(255, 30, 30, 30);
-            constellationPanel.BackColor = Color.FromArgb(255, 20, 20, 20);
-            labelVersion.BackColor = Color.FromArgb(255, 20, 20, 20);
-            labelSite.BackColor = Color.FromArgb(255, 20, 20, 20);
-
             Program.Log(logsrc, "Main() initialised");
         }
 
@@ -76,6 +69,7 @@ namespace goesrecv_monitor
                 Symbols.Stop();
 
                 ResetUI();
+                if (Program.BigWindow.Visible) { Program.BigWindow.ResetUI(); }
             }
             else
             {
@@ -169,19 +163,19 @@ namespace goesrecv_monitor
             {
                 // Swap to BPSK
                 constellationPanel.Order = 2;
-                constellationPanel.Height = 184;
-                labelVersion.Location = new Point(2, 167);
-                labelSite.Location = new Point(286, 167);
-                this.Height = 222;
+                //constellationPanel.Height = 184;
+                //labelVersion.Location = new Point(2, 167);
+                //labelSite.Location = new Point(286, 167);
+                this.Height = 264;
                 constellationPanel.Invalidate();
             }
             else
             {
                 // Swap to QPSK
                 constellationPanel.Order = 4;
-                constellationPanel.Height = 350;
-                labelVersion.Location = new Point(2, 333);
-                labelSite.Location = new Point(286, 333);
+                //constellationPanel.Height = 350;
+                //labelVersion.Location = new Point(2, 333);
+                //labelSite.Location = new Point(286, 333);
                 this.Height = 389;
             }
 
@@ -232,8 +226,52 @@ namespace goesrecv_monitor
             Process.Start("https://github.com/sam210723/goesrecv-monitor/releases/latest");
         }
 
+        /// <summary>
+        /// Open large statistics window
+        /// </summary>
+        private void btnLargeStats_Click(object sender, EventArgs e)
+        {
+            if (Program.BigWindow.Visible)
+            {
+                Program.BigWindow.Activate();
+                return;
+            }
 
-        // Properties
+            try
+            {
+                Program.BigWindow.Show();
+            }
+            catch (ObjectDisposedException)
+            {
+                Program.BigWindow = new Big();
+                Program.BigWindow.Show();
+            }
+        }
+
+        /// <summary>
+        /// Open statistics plot window
+        /// </summary>
+        private void btnPlot_Click(object sender, EventArgs e)
+        {
+            if (Program.PlotWindow.Visible)
+            {
+                Program.PlotWindow.Activate();
+                return;
+            }
+
+            try
+            {
+                Program.PlotWindow.Show();
+            }
+            catch (ObjectDisposedException)
+            {
+                Program.PlotWindow = new Plot();
+                Program.PlotWindow.Show();
+            }
+        }
+
+
+        #region Properties
         public bool SignalLock
         {
             set
@@ -372,5 +410,6 @@ namespace goesrecv_monitor
 
             }
         }
+        #endregion
     }
 }

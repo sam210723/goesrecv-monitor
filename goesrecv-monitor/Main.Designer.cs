@@ -42,6 +42,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textIP = new System.Windows.Forms.TextBox();
             this.btnConnct = new System.Windows.Forms.Button();
+            this.btnLargeStats = new System.Windows.Forms.Button();
+            this.btnPlot = new System.Windows.Forms.Button();
             this.constellationPanel = new goesrecv_monitor.ConstellationPanel();
             this.labelVersion = new System.Windows.Forms.LinkLabel();
             this.labelSite = new System.Windows.Forms.LinkLabel();
@@ -193,38 +195,70 @@
             // 
             // textIP
             // 
-            this.textIP.BackColor = System.Drawing.Color.White;
+            this.textIP.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.textIP.ForeColor = System.Drawing.Color.White;
             this.textIP.Location = new System.Drawing.Point(574, 115);
             this.textIP.MaxLength = 15;
             this.textIP.Multiline = true;
             this.textIP.Name = "textIP";
             this.textIP.Size = new System.Drawing.Size(90, 20);
-            this.textIP.TabIndex = 2;
+            this.textIP.TabIndex = 0;
             this.textIP.Text = "192.168.1.";
             this.textIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textIP_KeyPress);
             // 
             // btnConnct
             // 
+            this.btnConnct.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.btnConnct.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConnct.ForeColor = System.Drawing.Color.White;
             this.btnConnct.Location = new System.Drawing.Point(573, 143);
             this.btnConnct.Name = "btnConnct";
             this.btnConnct.Size = new System.Drawing.Size(92, 27);
-            this.btnConnct.TabIndex = 3;
+            this.btnConnct.TabIndex = 1;
             this.btnConnct.Text = "Connect";
-            this.btnConnct.UseVisualStyleBackColor = true;
+            this.btnConnct.UseVisualStyleBackColor = false;
             this.btnConnct.Click += new System.EventHandler(this.btnConnct_Click);
+            // 
+            // btnLargeStats
+            // 
+            this.btnLargeStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnLargeStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnLargeStats.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLargeStats.ForeColor = System.Drawing.Color.White;
+            this.btnLargeStats.Location = new System.Drawing.Point(519, 186);
+            this.btnLargeStats.Name = "btnLargeStats";
+            this.btnLargeStats.Size = new System.Drawing.Size(145, 27);
+            this.btnLargeStats.TabIndex = 2;
+            this.btnLargeStats.Text = "Open Large View";
+            this.btnLargeStats.UseVisualStyleBackColor = false;
+            this.btnLargeStats.Click += new System.EventHandler(this.btnLargeStats_Click);
+            // 
+            // btnPlot
+            // 
+            this.btnPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnPlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnPlot.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPlot.ForeColor = System.Drawing.Color.White;
+            this.btnPlot.Location = new System.Drawing.Point(364, 186);
+            this.btnPlot.Name = "btnPlot";
+            this.btnPlot.Size = new System.Drawing.Size(145, 27);
+            this.btnPlot.TabIndex = 3;
+            this.btnPlot.Text = "Open Statistics Plot";
+            this.btnPlot.UseVisualStyleBackColor = false;
+            this.btnPlot.Click += new System.EventHandler(this.btnPlot_Click);
             // 
             // constellationPanel
             // 
+            this.constellationPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.constellationPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.constellationPanel.Controls.Add(this.labelVersion);
             this.constellationPanel.Controls.Add(this.labelSite);
             this.constellationPanel.LineColor = System.Drawing.Color.DarkSlateGray;
             this.constellationPanel.Location = new System.Drawing.Point(0, 0);
             this.constellationPanel.Name = "constellationPanel";
             this.constellationPanel.Order = 2;
-            this.constellationPanel.Size = new System.Drawing.Size(350, 183);
+            this.constellationPanel.Size = new System.Drawing.Size(350, 225);
             this.constellationPanel.SymbolColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
             this.constellationPanel.SymbolScale = 1.75F;
             this.constellationPanel.SymbolSize = 5;
@@ -234,13 +268,15 @@
             // labelVersion
             // 
             this.labelVersion.ActiveLinkColor = System.Drawing.Color.Silver;
+            this.labelVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelVersion.AutoSize = true;
+            this.labelVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.labelVersion.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelVersion.LinkColor = System.Drawing.Color.DimGray;
-            this.labelVersion.Location = new System.Drawing.Point(2, 167);
+            this.labelVersion.Location = new System.Drawing.Point(2, 209);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(25, 13);
-            this.labelVersion.TabIndex = 18;
+            this.labelVersion.TabIndex = 5;
             this.labelVersion.TabStop = true;
             this.labelVersion.Text = "VER";
             this.labelVersion.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelVersion_LinkClicked);
@@ -248,13 +284,15 @@
             // labelSite
             // 
             this.labelSite.ActiveLinkColor = System.Drawing.Color.Silver;
+            this.labelSite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelSite.AutoSize = true;
+            this.labelSite.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.labelSite.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSite.LinkColor = System.Drawing.Color.DimGray;
-            this.labelSite.Location = new System.Drawing.Point(286, 167);
+            this.labelSite.Location = new System.Drawing.Point(286, 209);
             this.labelSite.Name = "labelSite";
             this.labelSite.Size = new System.Drawing.Size(61, 13);
-            this.labelSite.TabIndex = 17;
+            this.labelSite.TabIndex = 4;
             this.labelSite.TabStop = true;
             this.labelSite.Text = "vksdr.com";
             this.labelSite.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelSite_LinkClicked);
@@ -264,7 +302,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(678, 183);
+            this.ClientSize = new System.Drawing.Size(678, 225);
+            this.Controls.Add(this.btnPlot);
+            this.Controls.Add(this.btnLargeStats);
             this.Controls.Add(this.constellationPanel);
             this.Controls.Add(this.textIP);
             this.Controls.Add(this.btnConnct);
@@ -303,6 +343,8 @@
         private ConstellationPanel constellationPanel;
         private System.Windows.Forms.LinkLabel labelSite;
         private System.Windows.Forms.LinkLabel labelVersion;
+        private System.Windows.Forms.Button btnLargeStats;
+        private System.Windows.Forms.Button btnPlot;
     }
 }
 
