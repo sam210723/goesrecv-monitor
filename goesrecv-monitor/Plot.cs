@@ -41,6 +41,20 @@ namespace goesrecv_monitor
         /// </summary>
         public void Update(int viterbi, int rs)
         {
+            // Enable CSV export and clear plot buttons when data is added
+            if (btnExportCSV.InvokeRequired)
+            {
+                btnExportCSV.Invoke((MethodInvoker)(() => {
+                    btnExportCSV.Enabled = true;
+                    btnClearPlot.Enabled = true;
+                }));
+            }
+            else
+            {
+                btnExportCSV.Enabled = true;
+                btnClearPlot.Enabled = true;
+            }
+
             DateTime now = DateTime.Now;
 
             if (chartStats.InvokeRequired)

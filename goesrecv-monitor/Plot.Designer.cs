@@ -177,6 +177,7 @@
             // 
             this.btnExportCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExportCSV.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnExportCSV.Enabled = false;
             this.btnExportCSV.ForeColor = System.Drawing.Color.White;
             this.btnExportCSV.Location = new System.Drawing.Point(1095, 376);
             this.btnExportCSV.Name = "btnExportCSV";
@@ -190,6 +191,7 @@
             // 
             this.btnClearPlot.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClearPlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnClearPlot.Enabled = false;
             this.btnClearPlot.ForeColor = System.Drawing.Color.White;
             this.btnClearPlot.Location = new System.Drawing.Point(1009, 376);
             this.btnClearPlot.Name = "btnClearPlot";
