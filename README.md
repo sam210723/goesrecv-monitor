@@ -6,7 +6,7 @@
 
 goesrecv monitor is a software utility for monitoring the status of [goesrecv](https://github.com/pietern/goestools) by [Pieter Noordhuis](https://twitter.com/pnoordhuis). goesrecv is a BPSK demodulator and CCSDS decoder for LRIT and HRIT downlinks transmitted by geostationary weather satellites like GOES-16/17 and GK-2A.
 
-<p align="center"><img src="screenshots/main-window.png"></p>
+<p align="center"><img src="screenshots/main-window.gif"></p>
 
 ## Getting Started
 Microsoft [.NET Framework Runtime v4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48) ([direct download](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)) is required to run **goesrecv monitor**. Once .NET is installed, download the [latest release](https://github.com/sam210723/goesrecv-monitor/releases/latest/download/goesrecv-monitor.zip) of **goesrecv monitor** and extract all files inside the ZIP to a new folder.
