@@ -47,6 +47,7 @@ namespace goesrecv_monitor
             Socket s = new Socket(SocketType.Stream, ProtocolType.Tcp);
             Program.Log(logsrc, "Socket created");
 
+            byte[] res = new byte[8];
             try
             {
                 // Connect socket
@@ -57,7 +58,6 @@ namespace goesrecv_monitor
                 s.Send(nninit);
 
                 // Check nanomsg response
-                byte[] res = new byte[8];
                 int bytesRec = s.Receive(res);
                 if (res.SequenceEqual(nnires))
                 {
@@ -77,11 +77,12 @@ namespace goesrecv_monitor
             }
 
             byte[] dres = new byte[65536];
-            int num;
+            byte[] buffer = new byte[65536];
+            int num, remainingBytesToWrite, startReadingAt, totalBytes = 0, bytesBeforeHeader = 0;
             while (true)
             {
                 // Receive message content
-                num = s.Receive(dres);
+                num = s.Receive(buffer);
 
                 // Kill thread if no data received
                 if (num == 0)
@@ -98,9 +99,34 @@ namespace goesrecv_monitor
                     return;
                 }
 
+                //Parse nanomsg response to find headers and remove them
+                remainingBytesToWrite = num;
+                startReadingAt = 0;
+                while (remainingBytesToWrite > bytesBeforeHeader)
+                {
+                    //Write Information before header
+                    if (bytesBeforeHeader > 0)
+                    {
+                        Buffer.BlockCopy(buffer, startReadingAt, dres, totalBytes, bytesBeforeHeader);
+                        totalBytes += bytesBeforeHeader;
+                    }
+
+                    //Get next nanomsg packet length
+                    Array.Copy(buffer, bytesBeforeHeader + startReadingAt, res, 0, 8);
+                    if (BitConverter.IsLittleEndian) Array.Reverse(res);
+                    startReadingAt += bytesBeforeHeader + 8;
+                    remainingBytesToWrite = num - startReadingAt;
+                    bytesBeforeHeader = (int)BitConverter.ToUInt64(res, 0);
+                }
+
+                //No more headers in bytes we have; write the rest of the bytes
+                Buffer.BlockCopy(buffer, startReadingAt, dres, totalBytes, remainingBytesToWrite);
+                bytesBeforeHeader -= remainingBytesToWrite;
+
                 // Update UI
                 Program.MainWindow.DrawSymbols(dres);
 
+                totalBytes = 0;
                 Thread.Sleep(10);
             }
         }
